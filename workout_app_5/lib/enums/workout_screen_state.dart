@@ -1,0 +1,1 @@
+enum WorkOutScreenState {exercise, rest}
