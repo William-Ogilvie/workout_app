@@ -74,7 +74,7 @@ class DatabaseManager {
     return db.execute(
       '''
       INSERT INTO $_tableWorkOutCourses ($columnName, $columnCourseNumber, $columnCourseTimes) VALUES
-      ("Personal Workout", "16#11#13#14#8#10#2#5#18#6#9#3#7#4#15#1#17#12", "60#30#60#100#60#120#60#40#60#20#60#20#60#20#60#30#60#10")
+      ("Personal Workout", "16#11#13#14#8#10#2#5#18#6#9#3#7#4#15#1#17#12", "60#100#60#100#60#180#60#100#60#30#60#20#60#20#60#30#60#20")
       '''
     );
   }
