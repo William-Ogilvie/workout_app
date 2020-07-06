@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
+import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_components_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
 import 'package:workout_app_5/widgets/reusable_button.dart';
@@ -8,6 +10,9 @@ class CreateWorkOutSelection extends StatelessWidget {
   static const id = 'create_workout_selection';
   @override
   Widget build(BuildContext context) {
+    CourseCreationProvider _courseCreationProvider =
+        Provider.of<CourseCreationProvider>(context, listen: false);
+    
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -42,6 +47,7 @@ class CreateWorkOutSelection extends StatelessWidget {
                     text: 'Create Workout Course',
                     textStyle: kDefaultTextStyle,
                     onPressed: () {
+                      _courseCreationProvider.launch();
                       Navigator.pushNamed(context, CreateCourseScreen.id);
                     },
                   ),

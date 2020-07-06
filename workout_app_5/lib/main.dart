@@ -26,6 +26,9 @@ class WorkOut extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: CourseCreationProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: CourseCreationProvider(),
+        ),
       ],
       child: MaterialApp(
         initialRoute: WelcomeScreen.id,

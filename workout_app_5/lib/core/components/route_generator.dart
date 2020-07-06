@@ -42,7 +42,7 @@ class RouteGenerator {
         );
       case CreateCourseScreen.id:
         return MaterialPageRoute(
-          builder: (context) => CreateComponenetsScreen(),
+          builder: (context) => CreateCourseScreen(),
         );
     }
   }

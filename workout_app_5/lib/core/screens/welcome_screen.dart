@@ -96,6 +96,8 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () async {
                   List<Map<String, dynamic>> querryRows =
                       await DatabaseManager.instance.querryAll();
+                  print(querryRows[0]);
+                  print(querryRows[5]);
                   print(querryRows);
                 },
               ),
