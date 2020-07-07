@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
+import 'package:workout_app_5/locator.dart';
 
 class CreationCard {
 
@@ -11,7 +12,7 @@ class CreationCard {
 
   CreationCard({this.workOutName,this.type,this.active,this.cardIndex});
 
-  
+  CourseCreationProvider courseCreationProvider = locator<CourseCreationProvider>();
 
   void generateCard() {
     finishedCard = Card(
@@ -22,8 +23,9 @@ class CreationCard {
         leading: Text(type),
         selected: false,
         onTap: () {
-          active ? active = false : active = true;
-          generateCard();
+          //active ? active = false : active = true;
+          //generateCard();
+          courseCreationProvider.rebuildList(cardIndex);
           print(cardIndex);
         },
       ),

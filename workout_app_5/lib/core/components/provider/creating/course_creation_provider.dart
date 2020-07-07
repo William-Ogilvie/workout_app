@@ -48,6 +48,15 @@ class CourseCreationProvider extends ChangeNotifier {
     }  
   }
 
+  void rebuildList(int index) {
+    CreationCard _tempCard = CreationCard();
+    creationCardList[index].active = true;
+    _tempCard = creationCardList[index];
+    _tempCard.generateCard();
+
+    creationCompletedCardList.insert(index, _tempCard.finishedCard);
+  }
+
 }
 
 // void rebuildList(int index) {
