@@ -13,31 +13,12 @@ class CreateCourseScreen extends StatelessWidget {
       child: Scaffold(
         body: Container(
           margin: EdgeInsets.all(24),
-          child: Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Consumer<CourseCreationProvider>(
-                  builder: (context, courseCreationProvider, child) =>
-                      ListView.builder(
-                        itemCount: courseCreationProvider.creationCardList.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            height: 50.0,
-                            width: 50.0,
-                            child: Text(courseCreationProvider
-                                .creationCardList[index].workOutName),
-                          );
-                        },
-                      ),
-                ),
-                RaisedButton(
-                  color: Colors.blue,
-                  onPressed: () {
-                    _courseCreationProvider.launch();
-                  },
-                ),
-              ],
+          child: Center(
+            child: Consumer<CourseCreationProvider>(
+              builder: (context, courseCreationProvider, child) => ListView(
+                scrollDirection: Axis.vertical,
+                children: courseCreationProvider.creationCompletedCardList,
+              ),
             ),
           ),
         ),
