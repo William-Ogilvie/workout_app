@@ -7,6 +7,7 @@ import 'package:workout_app_5/core/screens/edit_workout_screen.dart';
 import 'package:workout_app_5/core/screens/welcome_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_components_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
+import 'package:workout_app_5/core/screens/workout_creation/create_course_second_screen.dart';
 import 'package:workout_app_5/core/screens/workout_description.dart';
 import 'package:workout_app_5/core/screens/workout_manager_screen.dart';
 import 'package:workout_app_5/core/screens/workout_selection.dart';
@@ -43,6 +44,10 @@ class RouteGenerator {
       case CreateCourseScreen.id:
         return MaterialPageRoute(
           builder: (context) => CreateCourseScreen(),
+        );
+      case CreateCourseSecondScreen.id:
+        return MaterialPageRoute(
+          builder: (context) => CreateCourseSecondScreen(),
         );
     }
   }

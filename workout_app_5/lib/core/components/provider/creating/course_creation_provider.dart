@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app_5/core/components/classes/creation_card.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
+import 'package:workout_app_5/widgets/creation/stateless_creation_card.dart';
 
 class CourseCreationProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _mapList = [];
@@ -9,6 +9,14 @@ class CourseCreationProvider extends ChangeNotifier {
 
   ScrollController scrollController;
 
+  List<StatelessCreationCard> _statelessCreationCardSelected = [];
+
+  List<StatelessCreationCard> get statelessCreationCardSelected => _statelessCreationCardSelected;
+
+  set statelessCreationCardSelected(List<StatelessCreationCard> val) {
+    _statelessCreationCardSelected = val;
+    notifyListeners();
+  }
 
   StatelessCreationCard _statelessCreationCard;
   List<StatelessCreationCard> _statelessCreationCardList = [];
@@ -36,9 +44,10 @@ class CourseCreationProvider extends ChangeNotifier {
     // print(_mapList);
     for (_index = 0; _index < _mapList.length; _index++) {
       _statelessCreationCard = StatelessCreationCard(
-        workOutName: _mapList[_index].values.first.toString(),
-        type: _mapList[_index].values.last,
+        workOutName: _mapList[_index].values.elementAt(0).toString(),
+        type: _mapList[_index].values.elementAt(2),
         cardIndex: _index,
+        description: _mapList[_index].values.elementAt(1),
       );
 
       activeList.add(false);
@@ -48,17 +57,21 @@ class CourseCreationProvider extends ChangeNotifier {
 
   void rebuild(int index) {
     bool _tempBool;
+    
     activeList.elementAt(index) ? _tempBool = false : _tempBool = true;
     activeList.removeAt(index);
     activeList.insert(index == 0 ? index : index--, _tempBool);
-    print(activeList);
-
-
-  //   _statelessCreationCard = statelessCreationCardList[index];
-  //   statelessCreationCardList.removeAt(index);
-  //   statelessCreationCardList.insert(index == 0 ? index : index--, _statelessCreationCard);
+    
+    statelessCreationCardList = statelessCreationCardList;
   }
 
-  
+  void createWithSelected() {
+    
+    for (_index = 0; _index < activeList.length; _index++) {
+      activeList[_index] ? statelessCreationCardSelected.add(statelessCreationCardList[_index]) : print('funny'); 
+    }
+    
+  }
+
 }
 

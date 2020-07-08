@@ -104,7 +104,7 @@ class DatabaseManager {
 
   Future <List<Map<String,dynamic>>> querryAllComponenets() async{
     Database db = await instance.database;
-    return await db.query(_tableWorkOutComponents,columns: [columnName, columnType]);
+    return await db.query(_tableWorkOutComponents,columns: [columnName,columnDescription, columnType]);
   }
 
   Future<List<Map<String,dynamic>>> querryAll() async {
