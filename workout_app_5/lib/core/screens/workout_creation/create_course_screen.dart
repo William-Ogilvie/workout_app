@@ -16,8 +16,9 @@ class CreateCourseScreen extends StatelessWidget {
           child: Center(
             child: Consumer<CourseCreationProvider>(
               builder: (context, courseCreationProvider, child) => ListView(
+                controller: courseCreationProvider.scrollController,
                 scrollDirection: Axis.vertical,
-                children: courseCreationProvider.creationCompletedCardList,
+                children: courseCreationProvider.statelessCreationCardList,
               ),
             ),
           ),

@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
-import 'package:workout_app_5/locator.dart';
 
-class CreationCard {
 
-  String workOutName;
-  String type;
-  int cardIndex;
-  bool active;
-  Card finishedCard;
 
-  CreationCard({this.workOutName,this.type,this.active,this.cardIndex});
+class StatelessCreationCard extends StatelessWidget {
+  final String workOutName;
+  final String type;
+  final int cardIndex;
 
-  CourseCreationProvider courseCreationProvider = locator<CourseCreationProvider>();
+  StatelessCreationCard({this.workOutName,this.type,this.cardIndex});
 
-  void generateCard() {
-    finishedCard = Card(
-      color: active ? Colors.grey[400] : Colors.white,
-      child: ListTile(
-        title: Text(workOutName),
-        enabled: true,
-        leading: Text(type),
-        selected: false,
-        onTap: () {
-          //active ? active = false : active = true;
-          //generateCard();
-          courseCreationProvider.rebuildList(cardIndex);
-          print(cardIndex);
-        },
+  
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CourseCreationProvider>(
+      builder: (context, courseCreationProvider, child) =>
+      Card(
+        color: courseCreationProvider.activeList[cardIndex] ? Colors.grey[500] : Colors.white,
+        child: ListTile(
+          title: Text(workOutName),
+          enabled: true,
+          leading: Text(type),
+          selected: false,
+          onTap: () {
+            print(courseCreationProvider.activeList[cardIndex]);
+            courseCreationProvider.rebuild(cardIndex);
+            print(courseCreationProvider.activeList[cardIndex]);
+          },
+        ),      
       ),
     );
   }
-
 }
 

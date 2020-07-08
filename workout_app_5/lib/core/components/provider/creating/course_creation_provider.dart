@@ -1,66 +1,64 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app_5/core/components/classes/creation_card.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
 
 class CourseCreationProvider extends ChangeNotifier {
-
   List<Map<String, dynamic>> _mapList = [];
-  List<CreationCard> _creationCardList = [];
-  List<Card> _creationCompletedCardList = [];
   int _index = 0;
 
+  ScrollController scrollController;
 
-  List<CreationCard> get creationCardList => _creationCardList;
 
-  set creationCardList (List<CreationCard> val) {
-    _creationCardList = val;
+  StatelessCreationCard _statelessCreationCard;
+  List<StatelessCreationCard> _statelessCreationCardList = [];
+
+  List<bool> _activeList = [];
+
+  List<bool> get activeList => _activeList;
+
+  set activeList(List<bool> val) {
+    _activeList = val;
     notifyListeners();
   }
+  
 
-  List<Card> get creationCompletedCardList => _creationCompletedCardList;
 
-  set creationCompletedCardList (List<Card> val) {
-    _creationCompletedCardList = val;
+  List<StatelessCreationCard> get statelessCreationCardList => _statelessCreationCardList;
+
+  set statelessCreationCardList(List<StatelessCreationCard> val) {
+    _statelessCreationCardList = val;
     notifyListeners();
   }
 
   void launch() async {
     _mapList = await DatabaseManager.instance.querryAllComponenets();
     // print(_mapList);
-    for(_index = 0; _index < _mapList.length; _index++) {
-      CreationCard _tempCard = CreationCard();
-      _tempCard.workOutName = _mapList[_index].values.first.toString();
-      _tempCard.type = _mapList[_index].values.last;
-      _tempCard.active = false;
-      _tempCard.cardIndex = _index;
-      creationCardList.add(_tempCard);
-      print(creationCardList[_index].workOutName);
-      print(creationCardList[_index].type);
-      
-      _tempCard.generateCard();
-      
-      creationCompletedCardList.add(_tempCard.finishedCard);
-      
-      
-    }  
+    for (_index = 0; _index < _mapList.length; _index++) {
+      _statelessCreationCard = StatelessCreationCard(
+        workOutName: _mapList[_index].values.first.toString(),
+        type: _mapList[_index].values.last,
+        cardIndex: _index,
+      );
+
+      activeList.add(false);
+      statelessCreationCardList.add(_statelessCreationCard);
+    }
   }
 
-  void rebuildList(int index) {
-    CreationCard _tempCard = CreationCard();
-    creationCardList[index].active = true;
-    _tempCard = creationCardList[index];
-    _tempCard.generateCard();
+  void rebuild(int index) {
+    bool _tempBool;
+    activeList.elementAt(index) ? _tempBool = false : _tempBool = true;
+    activeList.removeAt(index);
+    activeList.insert(index == 0 ? index : index--, _tempBool);
+    print(activeList);
 
-    creationCompletedCardList.insert(index, _tempCard.finishedCard);
+
+  //   _statelessCreationCard = statelessCreationCardList[index];
+  //   statelessCreationCardList.removeAt(index);
+  //   statelessCreationCardList.insert(index == 0 ? index : index--, _statelessCreationCard);
   }
 
+  
 }
 
-// void rebuildList(int index) {
-//         _tempCard.active = true;
-//         _tempCard.generateCard();
-//         creationCompletedCardList.insert(index, _tempCard.finishedCard);
-//       }
