@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
+import 'package:workout_app_5/widgets/creation/stateless_created_card.dart';
 import 'package:workout_app_5/widgets/creation/stateless_creation_card.dart';
 
 class CourseCreationProvider extends ChangeNotifier {
@@ -8,15 +9,6 @@ class CourseCreationProvider extends ChangeNotifier {
   int _index = 0;
 
   ScrollController scrollController;
-
-  List<StatelessCreationCard> _statelessCreationCardSelected = [];
-
-  List<StatelessCreationCard> get statelessCreationCardSelected => _statelessCreationCardSelected;
-
-  set statelessCreationCardSelected(List<StatelessCreationCard> val) {
-    _statelessCreationCardSelected = val;
-    notifyListeners();
-  }
 
   StatelessCreationCard _statelessCreationCard;
   List<StatelessCreationCard> _statelessCreationCardList = [];
@@ -29,13 +21,22 @@ class CourseCreationProvider extends ChangeNotifier {
     _activeList = val;
     notifyListeners();
   }
-  
 
-
-  List<StatelessCreationCard> get statelessCreationCardList => _statelessCreationCardList;
+  List<StatelessCreationCard> get statelessCreationCardList =>
+      _statelessCreationCardList;
 
   set statelessCreationCardList(List<StatelessCreationCard> val) {
     _statelessCreationCardList = val;
+    notifyListeners();
+  }
+
+  List<StatelessCreatedCard> _statelessCreatedCardList = [];
+
+  List<StatelessCreatedCard> get statelessCreatedCardList =>
+      _statelessCreatedCardList;
+
+  set statelessCreatedCardList(List<StatelessCreatedCard> val) {
+    _statelessCreatedCardList = val;
     notifyListeners();
   }
 
@@ -57,21 +58,65 @@ class CourseCreationProvider extends ChangeNotifier {
 
   void rebuild(int index) {
     bool _tempBool;
-    
+
     activeList.elementAt(index) ? _tempBool = false : _tempBool = true;
     activeList.removeAt(index);
     activeList.insert(index == 0 ? index : index--, _tempBool);
-    
+
     statelessCreationCardList = statelessCreationCardList;
   }
 
   void createWithSelected() {
-    
+    int _newCardIndex = 0;
     for (_index = 0; _index < activeList.length; _index++) {
-      activeList[_index] ? statelessCreationCardSelected.add(statelessCreationCardList[_index]) : print('funny'); 
+      if (activeList[_index] == true) {
+        StatelessCreatedCard tempCard = StatelessCreatedCard(
+          cardIndex: _newCardIndex,
+          description: _statelessCreationCardList[_index].description,
+          workOutName: _statelessCreationCardList[_index].workOutName,
+          type: _statelessCreationCardList[_index].type,
+          key: UniqueKey(),
+        );
+        _newCardIndex++;
+        statelessCreatedCardList.add(tempCard);
+      }
     }
-    
   }
 
-}
+  void reorderList(int oldIndex, int newIndex) {
+    StatelessCreatedCard tempCard = StatelessCreatedCard(
+      cardIndex: oldIndex > newIndex ? newIndex : newIndex--,
+      description: statelessCreatedCardList[oldIndex].description,
+      workOutName: statelessCreatedCardList[oldIndex].workOutName,
+      type: statelessCreatedCardList[oldIndex].type,
+      key: statelessCreatedCardList[oldIndex].key,
+    );
+    print(oldIndex);
+    print(newIndex);
 
+    print(statelessCreatedCardList);
+    statelessCreatedCardList.removeAt(oldIndex);
+
+    oldIndex > newIndex
+        ? statelessCreatedCardList.insert(newIndex, tempCard)
+        : newIndex >= statelessCreatedCardList.length
+            ? statelessCreatedCardList.add(tempCard)
+            : statelessCreatedCardList.insert(newIndex--, tempCard);
+    print(statelessCreatedCardList);
+    rebuildCreatedCardList();
+  }
+
+  void rebuildCreatedCardList() {
+    for (int index = 0; index < statelessCreatedCardList.length; index++) {
+      StatelessCreatedCard tempCard = StatelessCreatedCard(
+        cardIndex: index,
+        description: statelessCreatedCardList[index].description,
+        workOutName: statelessCreatedCardList[index].workOutName,
+        type: statelessCreatedCardList[index].type,
+        key: statelessCreatedCardList[index].key,
+      );
+      statelessCreatedCardList.removeAt(index);
+      statelessCreatedCardList.insert(index,tempCard);
+    }
+  }
+}

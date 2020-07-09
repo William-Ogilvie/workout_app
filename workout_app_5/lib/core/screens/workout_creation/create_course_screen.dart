@@ -13,7 +13,7 @@ class CreateCourseScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(24),
+          margin: EdgeInsets.all(12.0),
           child: Center(
             child: CreatedListView(),
           ),
