@@ -104,7 +104,6 @@ class CreateComponenetsScreen extends StatelessWidget {
                     child: Text(
                       'Submit',
                       style: TextStyle(
-                        color: Colors.blue,
                         fontSize: 16,
                       ),
                     ),

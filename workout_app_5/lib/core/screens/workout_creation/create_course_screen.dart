@@ -45,7 +45,10 @@ class CreateFloatingActionButton extends StatelessWidget {
       builder: (context, courseCreationProvider, child) => FloatingActionButton(
         onPressed: () {
           courseCreationProvider.createWithSelected();
-          Navigator.pushNamed(context, CreateCourseSecondScreen.id);
+          courseCreationProvider.alreadyPushed
+              ? Navigator.pop(context)
+              : Navigator.pushReplacementNamed(
+                  context, CreateCourseSecondScreen.id);
         },
         elevation: 8.0,
         tooltip: 'Create Workout Course',

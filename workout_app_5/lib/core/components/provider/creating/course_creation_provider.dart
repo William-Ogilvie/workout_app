@@ -40,6 +40,24 @@ class CourseCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _alreadyPushed = false;
+
+  bool get alreadyPushed => _alreadyPushed;
+
+  set alreadyPushed(bool val) {
+    _alreadyPushed = val;
+    notifyListeners();
+  } 
+
+  bool _removeMode = false;
+
+  bool get removeMode => _removeMode;
+
+  set removeMode(bool val) {
+    _removeMode = val;
+    notifyListeners();
+  } 
+
   void launch() async {
     _mapList = await DatabaseManager.instance.querryAllComponenets();
     // print(_mapList);
@@ -89,6 +107,7 @@ class CourseCreationProvider extends ChangeNotifier {
       description: statelessCreatedCardList[oldIndex].description,
       workOutName: statelessCreatedCardList[oldIndex].workOutName,
       type: statelessCreatedCardList[oldIndex].type,
+      timeNumber: statelessCreatedCardList[oldIndex].timeNumber,
       key: statelessCreatedCardList[oldIndex].key,
     );
     print(oldIndex);
@@ -113,10 +132,38 @@ class CourseCreationProvider extends ChangeNotifier {
         description: statelessCreatedCardList[index].description,
         workOutName: statelessCreatedCardList[index].workOutName,
         type: statelessCreatedCardList[index].type,
+        timeNumber: statelessCreatedCardList[index].timeNumber,
         key: statelessCreatedCardList[index].key,
       );
       statelessCreatedCardList.removeAt(index);
-      statelessCreatedCardList.insert(index,tempCard);
+      statelessCreatedCardList.insert(index, tempCard);
     }
+    statelessCreatedCardList = statelessCreatedCardList;
+  }
+
+  void resetActiveList() {
+    for (int index = 0; index < activeList.length; index++) {
+      activeList[index] = false;
+    }
+  }
+
+  void assignNumberInput(String val, int index) {
+    StatelessCreatedCard tempCard = StatelessCreatedCard(
+      cardIndex: index,
+      description: statelessCreatedCardList[index].description,
+      workOutName: statelessCreatedCardList[index].workOutName,
+      type: statelessCreatedCardList[index].type,
+      timeNumber: val,
+      key: statelessCreatedCardList[index].key,
+    );
+    statelessCreatedCardList.removeAt(index);
+    statelessCreatedCardList.insert(index, tempCard);
+
+    statelessCreatedCardList = statelessCreatedCardList;
+  }
+
+  void removeCardFromCours(int index) {
+    statelessCreatedCardList.removeAt(index);
+    rebuildCreatedCardList();
   }
 }
