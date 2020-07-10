@@ -104,7 +104,12 @@ class DatabaseManager {
 
   Future <List<Map<String,dynamic>>> querryAllComponenets() async{
     Database db = await instance.database;
-    return await db.query(_tableWorkOutComponents,columns: [columnName,columnDescription, columnType]);
+    return await db.query(_tableWorkOutComponents,columns: [columnName,columnDescription, columnType, columnId]);
+  }
+
+  Future <List<Map<String,dynamic>>> querryAllCourses() async {
+    Database db = await instance.database;
+    return await db.query(_tableWorkOutCourses, columns: [columnName, columnId]);
   }
 
   Future<List<Map<String,dynamic>>> querryAll() async {
@@ -123,6 +128,16 @@ class DatabaseManager {
       '''
       INSERT INTO $_tableWorkOutComponents ($columnName, $columnDescription, $columnType) VALUES
       ("${name.trim()}","${desc.trim()}","${type.trim()}")
+      '''
+    );
+  }
+
+  Future insertCourse(String courseName, String courseNumber, String courseTimes ) async {
+    Database db = await instance.database;
+    return await db.execute(
+      '''
+      INSERT INTO $_tableWorkOutCourses ($columnName,  $columnCourseNumber, $columnCourseTimes) VALUES
+      ("$courseName","$courseNumber","${courseTimes.trim()}")
       '''
     );
   }

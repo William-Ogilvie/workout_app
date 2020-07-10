@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
+import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
 import 'package:workout_app_5/core/screens/create_workout_selection.dart';
 import 'package:workout_app_5/core/screens/edit_workout_screen.dart';
 import 'package:workout_app_5/core/screens/workout_selection.dart';
@@ -11,6 +13,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WorkOutSelectionProvider _workOutSelectionProvider =
+        Provider.of<WorkOutSelectionProvider>(context, listen: false);
+    
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -42,7 +47,8 @@ class WelcomeScreen extends StatelessWidget {
                 width: 300.0,
                 text: 'Select Workout',
                 textStyle: kDefaultTextStyle,
-                onPressed: () {
+                onPressed: () async{
+                  await _workOutSelectionProvider.launch();
                   Navigator.pushNamed(context, WorkOutSelectionScreen.id);
                 },
               ),

@@ -41,17 +41,82 @@ class CreateCourseSecondScreen extends StatelessWidget {
                 Consumer<CourseCreationProvider>(
                   builder: (context, courseCreationProvider, child) =>
                       RaisedButton(
-                    color: courseCreationProvider.removeMode ? Colors.red[400] : Colors.grey[300],
+                    color: courseCreationProvider.removeMode
+                        ? Colors.red[400]
+                        : Colors.grey[300],
                     child: Text('Remove'),
                     onPressed: () {
-                      courseCreationProvider.removeMode ? courseCreationProvider.removeMode = false : courseCreationProvider.removeMode = true;
+                      courseCreationProvider.removeMode
+                          ? courseCreationProvider.removeMode = false
+                          : courseCreationProvider.removeMode = true;
                     },
                   ),
                 ),
                 RaisedButton(
                   color: Colors.grey[300],
                   child: Text('Submit'),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Stack(
+                            overflow: Overflow.visible,
+                            children: <Widget>[
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (String value) {
+                                          if (value.isEmpty) {
+                                            return 'A name is required';
+                                          }
+                                          return null;
+                                        },
+                                        controller: numberTextEditingController,
+                                        decoration: InputDecoration(
+                                            labelText: 'Enter a workout name'),
+                                        onSaved: (String val) {
+                                          courseCreationProvider.workOutName =
+                                              val;
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: RaisedButton(
+                                        child: Text('Submit'),
+                                        onPressed: () {
+                                          if (!_formKey.currentState
+                                              .validate()) {
+                                            return;
+                                          }
+
+                                          _formKey.currentState.save();
+                                          courseCreationProvider
+                                              .submitWorkOutCourse();
+                                          print('WorkOut Submitted!!!!');
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+
+                    //Navigator.pop(context);
+                  },
                 ),
               ],
             ),

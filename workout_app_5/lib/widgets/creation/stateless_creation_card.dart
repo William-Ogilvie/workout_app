@@ -7,8 +7,9 @@ class StatelessCreationCard extends StatelessWidget {
   final String type;
   final String description;
   final int cardIndex;
+  final int databaseId;
 
-  StatelessCreationCard({this.workOutName,this.type,this.cardIndex,this.description});
+  StatelessCreationCard({this.workOutName,this.type,this.cardIndex,this.description,this.databaseId});
 
   
   @override

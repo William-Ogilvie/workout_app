@@ -8,6 +8,8 @@ class CourseCreationProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _mapList = [];
   int _index = 0;
 
+  String workOutName = '';
+
   ScrollController scrollController;
 
   StatelessCreationCard _statelessCreationCard;
@@ -67,6 +69,7 @@ class CourseCreationProvider extends ChangeNotifier {
         type: _mapList[_index].values.elementAt(2),
         cardIndex: _index,
         description: _mapList[_index].values.elementAt(1),
+        databaseId: _mapList[_index].values.elementAt(3),
       );
 
       activeList.add(false);
@@ -93,6 +96,7 @@ class CourseCreationProvider extends ChangeNotifier {
           description: _statelessCreationCardList[_index].description,
           workOutName: _statelessCreationCardList[_index].workOutName,
           type: _statelessCreationCardList[_index].type,
+          databaseId: _statelessCreationCardList[_index].databaseId,
           key: UniqueKey(),
         );
         _newCardIndex++;
@@ -108,6 +112,7 @@ class CourseCreationProvider extends ChangeNotifier {
       workOutName: statelessCreatedCardList[oldIndex].workOutName,
       type: statelessCreatedCardList[oldIndex].type,
       timeNumber: statelessCreatedCardList[oldIndex].timeNumber,
+      databaseId: statelessCreatedCardList[oldIndex].databaseId,
       key: statelessCreatedCardList[oldIndex].key,
     );
     print(oldIndex);
@@ -133,6 +138,7 @@ class CourseCreationProvider extends ChangeNotifier {
         workOutName: statelessCreatedCardList[index].workOutName,
         type: statelessCreatedCardList[index].type,
         timeNumber: statelessCreatedCardList[index].timeNumber,
+        databaseId: statelessCreatedCardList[index].databaseId,
         key: statelessCreatedCardList[index].key,
       );
       statelessCreatedCardList.removeAt(index);
@@ -154,6 +160,7 @@ class CourseCreationProvider extends ChangeNotifier {
       workOutName: statelessCreatedCardList[index].workOutName,
       type: statelessCreatedCardList[index].type,
       timeNumber: val,
+      databaseId: statelessCreatedCardList[index].databaseId,
       key: statelessCreatedCardList[index].key,
     );
     statelessCreatedCardList.removeAt(index);
@@ -165,5 +172,33 @@ class CourseCreationProvider extends ChangeNotifier {
   void removeCardFromCours(int index) {
     statelessCreatedCardList.removeAt(index);
     rebuildCreatedCardList();
+  }
+
+  void submitWorkOutCourse() {
+    print(statelessCreatedCardList);
+    String tempSQLNumber = ''; 
+    String tempSQLReps = '';
+    for(int index = 0; index < statelessCreatedCardList.length; index++) {
+      switch (index) {
+        case 0:
+          tempSQLNumber = '${statelessCreatedCardList[index].databaseId}';
+          tempSQLReps = '${statelessCreatedCardList[index].timeNumber}';
+          break;
+        default:
+        tempSQLNumber = '$tempSQLNumber#${statelessCreatedCardList[index].databaseId}';
+        tempSQLReps = '$tempSQLReps#${statelessCreatedCardList[index].timeNumber}';
+      }
+    }
+    tempSQLNumber.replaceRange(tempSQLNumber.length, tempSQLNumber.length, '');
+    tempSQLNumber.trim();
+    tempSQLReps.replaceRange(tempSQLReps.length, tempSQLReps.length, '');
+    tempSQLReps.trim();
+    print(tempSQLNumber);
+    print(tempSQLReps);
+    print(workOutName);
+
+    DatabaseManager.instance.insertCourse(workOutName, tempSQLNumber, tempSQLReps);
+
+
   }
 }

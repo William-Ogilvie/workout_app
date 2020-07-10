@@ -8,6 +8,7 @@ class StatelessCreatedCard extends StatelessWidget {
   final String type;
   final String description;
   final int cardIndex;
+  final int databaseId;
   final String timeNumber;
   final TextEditingController textEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -16,7 +17,7 @@ class StatelessCreatedCard extends StatelessWidget {
 
 
   StatelessCreatedCard(
-      {this.workOutName, this.type, this.cardIndex, this.description, Key key, this.timeNumber})
+      {this.workOutName, this.type, this.cardIndex, this.description, Key key, this.timeNumber,this.databaseId})
       : super(key: key);
 
   @override
