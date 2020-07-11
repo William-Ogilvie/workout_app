@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
+import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
+import 'package:workout_app_5/core/screens/workout_creation/create_course_second_screen.dart';
 import 'package:workout_app_5/widgets/selection/stateless_selection_card.dart';
 
 class StatelessEditingSelectionCourseCard extends StatelessWidget {
@@ -11,6 +14,9 @@ class StatelessEditingSelectionCourseCard extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    CourseCreationProvider courseCreationProvider =
+        Provider.of<CourseCreationProvider>(context, listen: false);
+
     return Consumer<WorkOutSelectionProvider>(
       builder: (context, workOutSelectionProvider, child) =>
       Card(
@@ -20,7 +26,8 @@ class StatelessEditingSelectionCourseCard extends StatelessWidget {
           enabled: true,
           selected: false,
           onTap: () async{
-          
+            courseCreationProvider.launchEditMode(databaseId);
+            Navigator.pushNamed(context, CreateCourseSecondScreen.id);
           },
         ),      
       ),

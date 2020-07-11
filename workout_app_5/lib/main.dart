@@ -7,7 +7,7 @@ import 'core/components/provider/creating/course_creation_provider.dart';
 import 'core/components/provider/selecting/workout_selection_provider.dart';
 import 'core/components/route_generator.dart';
 import 'core/screens/welcome_screen.dart';
-import 'core/components/provider/editing/course_editing_provider.dart';
+
 
 void main() {
   setupLocator();

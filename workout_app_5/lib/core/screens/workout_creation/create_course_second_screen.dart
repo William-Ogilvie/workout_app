@@ -32,7 +32,9 @@ class CreateCourseSecondScreen extends StatelessWidget {
                 RaisedButton(
                   color: Colors.grey[300],
                   child: Text('Get more components'),
-                  onPressed: () {
+                  onPressed: () async{
+                    courseCreationProvider.editMode ? 
+                    await courseCreationProvider.launch(true) : print('funny2');
                     courseCreationProvider.alreadyPushed = true;
                     courseCreationProvider.resetActiveList();
                     Navigator.pushNamed(context, CreateCourseScreen.id);
@@ -54,7 +56,7 @@ class CreateCourseSecondScreen extends StatelessWidget {
                 ),
                 RaisedButton(
                   color: Colors.grey[300],
-                  child: Text('Submit'),
+                  child: Text(courseCreationProvider.editMode ? 'Save' : 'Submit'),
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -97,6 +99,9 @@ class CreateCourseSecondScreen extends StatelessWidget {
                                           }
 
                                           _formKey.currentState.save();
+                                          courseCreationProvider.editMode ? 
+                                          courseCreationProvider.saveWorkOutCourse()
+                                          :
                                           courseCreationProvider
                                               .submitWorkOutCourse();
                                           print('WorkOut Submitted!!!!');

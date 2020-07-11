@@ -49,7 +49,7 @@ class CourseCreationProvider extends ChangeNotifier {
   set alreadyPushed(bool val) {
     _alreadyPushed = val;
     notifyListeners();
-  } 
+  }
 
   bool _removeMode = false;
 
@@ -58,9 +58,31 @@ class CourseCreationProvider extends ChangeNotifier {
   set removeMode(bool val) {
     _removeMode = val;
     notifyListeners();
-  } 
+  }
 
-  void launch() async {
+  //editing variables
+  int _databaseCourseId;
+
+  String _courseNumberString;
+  String _courseNumberTimes;
+
+  List<String> _courseNumberStringList;
+  List<String> _courseNumberTimesList;
+
+  bool _editMode = false;
+
+  bool get editMode => _editMode;
+
+  set editMode(bool val) {
+    _editMode = val;
+    notifyListeners();
+  }
+
+  void launch(bool edit) async {
+    edit ? print('null2') : editMode = false;
+    statelessCreationCardList = [];
+    editMode ? print('null') : statelessCreatedCardList = [];
+    
     _mapList = await DatabaseManager.instance.querryAllComponenets();
     // print(_mapList);
     for (_index = 0; _index < _mapList.length; _index++) {
@@ -75,6 +97,43 @@ class CourseCreationProvider extends ChangeNotifier {
       activeList.add(false);
       statelessCreationCardList.add(_statelessCreationCard);
     }
+  }
+
+  void launchEditMode(int id) async {
+    statelessCreationCardList = [];
+    statelessCreatedCardList = [];
+    editMode = true;
+    _databaseCourseId = id; 
+
+    var temp = await DatabaseManager.instance.querryWorkOutCourse(id);
+    _courseNumberString = temp.values.first.toString();
+    _courseNumberStringList = _courseNumberString.split('#');
+    _courseNumberTimes = temp.values.last.toString();
+    _courseNumberTimesList = _courseNumberTimes.split('#');
+    print(_courseNumberStringList);
+    print(_courseNumberTimesList);
+
+
+    int _newCardIndex = 0;
+    for (int index = 0; index < _courseNumberStringList.length; index++) {
+      var map = await DatabaseManager.instance
+          .querryWorkOutComponent(int.parse(_courseNumberStringList[index]));
+      var tempList = map.values.toList();
+
+      StatelessCreatedCard tempCard = StatelessCreatedCard(
+        cardIndex: _newCardIndex,
+        description: tempList[1].toString().trim(),
+        workOutName: tempList[0].toString().trim(),
+        type: tempList[2].toString().trim(),
+        databaseId: int.parse(_courseNumberStringList[index]),
+        key: UniqueKey(),
+        timeNumber: _courseNumberTimesList[index],
+      );
+
+      _newCardIndex++;
+      statelessCreatedCardList.add(tempCard);
+    }
+    statelessCreatedCardList = statelessCreatedCardList;
   }
 
   void rebuild(int index) {
@@ -176,17 +235,19 @@ class CourseCreationProvider extends ChangeNotifier {
 
   void submitWorkOutCourse() {
     print(statelessCreatedCardList);
-    String tempSQLNumber = ''; 
+    String tempSQLNumber = '';
     String tempSQLReps = '';
-    for(int index = 0; index < statelessCreatedCardList.length; index++) {
+    for (int index = 0; index < statelessCreatedCardList.length; index++) {
       switch (index) {
         case 0:
           tempSQLNumber = '${statelessCreatedCardList[index].databaseId}';
           tempSQLReps = '${statelessCreatedCardList[index].timeNumber}';
           break;
         default:
-        tempSQLNumber = '$tempSQLNumber#${statelessCreatedCardList[index].databaseId}';
-        tempSQLReps = '$tempSQLReps#${statelessCreatedCardList[index].timeNumber}';
+          tempSQLNumber =
+              '$tempSQLNumber#${statelessCreatedCardList[index].databaseId}';
+          tempSQLReps =
+              '$tempSQLReps#${statelessCreatedCardList[index].timeNumber}';
       }
     }
     tempSQLNumber.replaceRange(tempSQLNumber.length, tempSQLNumber.length, '');
@@ -197,8 +258,36 @@ class CourseCreationProvider extends ChangeNotifier {
     print(tempSQLReps);
     print(workOutName);
 
-    DatabaseManager.instance.insertCourse(workOutName, tempSQLNumber, tempSQLReps);
+    DatabaseManager.instance
+        .insertCourse(workOutName, tempSQLNumber, tempSQLReps);
+  }
 
+  void saveWorkOutCourse() {
+    print(statelessCreatedCardList);
+    String tempSQLNumber = '';
+    String tempSQLReps = '';
+    for (int index = 0; index < statelessCreatedCardList.length; index++) {
+      switch (index) {
+        case 0:
+          tempSQLNumber = '${statelessCreatedCardList[index].databaseId}';
+          tempSQLReps = '${statelessCreatedCardList[index].timeNumber}';
+          break;
+        default:
+          tempSQLNumber =
+              '$tempSQLNumber#${statelessCreatedCardList[index].databaseId}';
+          tempSQLReps =
+              '$tempSQLReps#${statelessCreatedCardList[index].timeNumber}';
+      }
+    }
+    tempSQLNumber.replaceRange(tempSQLNumber.length, tempSQLNumber.length, '');
+    tempSQLNumber.trim();
+    tempSQLReps.replaceRange(tempSQLReps.length, tempSQLReps.length, '');
+    tempSQLReps.trim();
+    print(tempSQLNumber);
+    print(tempSQLReps);
+    print(workOutName);
 
+    DatabaseManager.instance
+        .updateCourse(workOutName, tempSQLNumber, tempSQLReps, _databaseCourseId);
   }
 }

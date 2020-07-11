@@ -47,7 +47,7 @@ class CreateWorkOutSelection extends StatelessWidget {
                     text: 'Create Workout Course',
                     textStyle: kDefaultTextStyle,
                     onPressed: () async{
-                      await _courseCreationProvider.launch();
+                      await _courseCreationProvider.launch(false);
                       Navigator.pushNamed(context, CreateCourseScreen.id);
                     },
                   ),

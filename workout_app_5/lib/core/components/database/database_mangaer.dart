@@ -142,6 +142,17 @@ class DatabaseManager {
     );
   }
 
+  Future updateCourse(String courseName, String courseNumber, String courseTimes, int id) async {
+    Database db = await instance.database;
+    return await db.execute(
+      '''
+      UPDATE $_tableWorkOutCourses
+      SET $columnName = "$courseName",$columnCourseNumber = "$courseNumber", $columnCourseTimes = "${courseTimes.trim()}"
+      WHERE $columnId = $id;
+      '''
+    );
+  }
+
   static final String _openingSQLInsertion = 
   '''
   ("Burpees", "Fun", "Reps"),
