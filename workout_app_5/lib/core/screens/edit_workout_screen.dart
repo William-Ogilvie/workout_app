@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
+import 'package:workout_app_5/core/components/provider/editing/edit_components_provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
+import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_course_selection.dart';
 import 'package:workout_app_5/widgets/reusable_button.dart';
 
@@ -11,7 +13,8 @@ class EditWorkOutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WorkOutSelectionProvider _workOutSelectionProvider =
         Provider.of<WorkOutSelectionProvider>(context, listen: false);
-    
+    EditComponentsProvider _editComponentsProvider = Provider.of<EditComponentsProvider>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -32,8 +35,9 @@ class EditWorkOutScreen extends StatelessWidget {
                     width: 300.0,
                     text: 'Edit Workout Componenets',
                     textStyle: kDefaultTextStyle,
-                    onPressed: () {
-                      Navigator.pushNamed(context, EditCourseSelectionScreen.id);
+                    onPressed: () async{
+                      await _editComponentsProvider.launch();
+                      Navigator.pushNamed(context, EditComponentsSelectionScreen.id);
                     },
                   ),
                 ),

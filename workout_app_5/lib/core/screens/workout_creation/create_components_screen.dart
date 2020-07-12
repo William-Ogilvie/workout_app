@@ -1,8 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
+import 'package:workout_app_5/core/components/database/database_mangaer.dart';
 import 'package:workout_app_5/core/components/provider/creating/component_creation_provider.dart';
 
 class CreateComponenetsScreen extends StatelessWidget {
@@ -11,7 +11,8 @@ class CreateComponenetsScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController workOutNameController = TextEditingController();
-  final TextEditingController workOutDescriptionController = TextEditingController();
+  final TextEditingController workOutDescriptionController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +101,15 @@ class CreateComponenetsScreen extends StatelessWidget {
                       componentCreationProvider.insertWorkOutComponent();
                       workOutDescriptionController.clear();
                       workOutNameController.clear();
+                      showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Workout Component Submited'),
+                          );
+                        },
+                      );
                     },
                     child: Text(
                       'Submit',
@@ -110,14 +120,10 @@ class CreateComponenetsScreen extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                  child: Consumer<ComponentCreationProvider>(
-                    builder: (context, componentCreationProvider, child) =>
-                        Text(
-                      componentCreationProvider.displayText
-                          ? 'Workout Component Added'
-                          : '',
-                      style: kTitleTextStyle,
-                    ),
+                  child: RaisedButton(
+                    onPressed: () {
+                      DatabaseManager.instance.deleteComponent(3);
+                    },
                   ),
                 ),
               ],

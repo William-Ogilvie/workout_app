@@ -9,7 +9,7 @@ class ComponentCreationProvider extends ChangeNotifier {
   String _workOutDescription;
   String _timeOrReps = 'Reps';
 
-  bool _displayText = false;
+  
 
   String get timeOrReps => _timeOrReps;
 
@@ -18,12 +18,7 @@ class ComponentCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get displayText => _displayText;
-
-  set displayText(bool val) {
-    _displayText = val;
-    notifyListeners();
-  }
+  
 
 
   void saveName(String name) {
@@ -45,8 +40,6 @@ class ComponentCreationProvider extends ChangeNotifier {
     print(timeOrReps);
     await DatabaseManager.instance.insertComponent(_workOutName, _workOutDescription, timeOrReps);
     print('Items added');
-    displayText = true;
-    Timer(const Duration(seconds: 3), () => displayText = false);
     _workOutName = '';
     _workOutDescription = '';
   }

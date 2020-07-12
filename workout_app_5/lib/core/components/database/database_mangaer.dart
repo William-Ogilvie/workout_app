@@ -4,9 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workout_app_5/core/components/database/database_storage.dart';
 
-
 class DatabaseManager {
-
   static final _dbName = 'primaryDatabase.db';
   static final _dbVersion = 1;
 
@@ -28,7 +26,7 @@ class DatabaseManager {
 
   static Database _database;
   Future<Database> get database async {
-    if(_database != null) {
+    if (_database != null) {
       return _database;
     }
 
@@ -39,50 +37,46 @@ class DatabaseManager {
 
   _initiateDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    _path = join(directory.path,_dbName);
+    _path = join(directory.path, _dbName);
     return await openDatabase(_path, version: _dbVersion, onCreate: _onCreate);
   }
 
   Future _onCreate(Database db, int version) {
-    
-    db.execute(
-      '''
+    db.execute('''
       CREATE TABLE $_tableWorkOutCourses(
       $columnId INTEGER PRIMARY KEY,
       $columnName TEXT NOT NULL,
       $columnCourseNumber TEXT NOT NULL,
       $columnCourseTimes TEXT NOT NULL
       )
-      '''
-    );
-    db.execute(
-      '''
+      ''');
+    db.execute('''
       CREATE TABLE $_tableWorkOutComponents(
       $columnId INTEGER PRIMARY KEY,
       $columnName TEXT NOT NULL,
       $columnDescription TEXT,
       $columnType TEXT NOT NULL
       )
-      '''
-    );
-    db.execute(
-      '''
+      ''');
+    db.execute('''
       INSERT INTO $_tableWorkOutComponents ($columnName, $columnDescription, $columnType) VALUES
       $_openingSQLInsertion
-      '''
-    );
-    return db.execute(
-      '''
+      ''');
+    return db.execute('''
       INSERT INTO $_tableWorkOutCourses ($columnName, $columnCourseNumber, $columnCourseTimes) VALUES
       ("Personal Workout", "16#11#13#14#8#10#2#5#18#6#9#3#7#4#15#1#17#12", "60#100#60#100#60#180#60#100#60#30#60#20#60#20#60#30#60#20")
-      '''
-    );
+      ''');
   }
 
-  Future <Map> querryWorkOutCourse(int id) async {
+  Future<Map> querryWorkOutCourse(int id) async {
     Database db = await instance.database;
-    List<Map> maps = await db.query(_tableWorkOutCourses,columns: [columnCourseNumber,columnCourseTimes],where: '$columnId = ?',whereArgs: [id],);
-    if(maps.length > 0) {
+    List<Map> maps = await db.query(
+      _tableWorkOutCourses,
+      columns: [columnCourseNumber, columnCourseTimes],
+      where: '$columnId = ?',
+      whereArgs: [id],
+    );
+    if (maps.length > 0) {
       var temp = maps.first;
       var temp2 = maps.last;
       var temp3 = {};
@@ -95,24 +89,31 @@ class DatabaseManager {
 
   Future<Map<String, dynamic>> querryWorkOutComponent(int id) async {
     Database db = await instance.database;
-    List<Map> maps = await db.query(_tableWorkOutComponents,columns: [columnName, columnDescription, columnType],where: '$columnId = ?',whereArgs: [id],);
-    if(maps.length > 0) {
+    List<Map> maps = await db.query(
+      _tableWorkOutComponents,
+      columns: [columnName, columnDescription, columnType],
+      where: '$columnId = ?',
+      whereArgs: [id],
+    );
+    if (maps.length > 0) {
       return maps.first;
     }
     return null;
   }
 
-  Future <List<Map<String,dynamic>>> querryAllComponenets() async{
+  Future<List<Map<String, dynamic>>> querryAllComponenets() async {
     Database db = await instance.database;
-    return await db.query(_tableWorkOutComponents,columns: [columnName,columnDescription, columnType, columnId]);
+    return await db.query(_tableWorkOutComponents,
+        columns: [columnName, columnDescription, columnType, columnId]);
   }
 
-  Future <List<Map<String,dynamic>>> querryAllCourses() async {
+  Future<List<Map<String, dynamic>>> querryAllCourses() async {
     Database db = await instance.database;
-    return await db.query(_tableWorkOutCourses, columns: [columnName, columnId]);
+    return await db
+        .query(_tableWorkOutCourses, columns: [columnName, columnId]);
   }
 
-  Future<List<Map<String,dynamic>>> querryAll() async {
+  Future<List<Map<String, dynamic>>> querryAll() async {
     Database db = await instance.database;
     return await db.query(_tableWorkOutComponents);
   }
@@ -122,39 +123,96 @@ class DatabaseManager {
     return await deleteDatabase(_path);
   }
 
-  Future insertComponent(String name, String desc, String type) async{
+  Future insertComponent(String name, String desc, String type) async {
     Database db = await instance.database;
-    return await db.execute(
-      '''
+    return await db.execute('''
       INSERT INTO $_tableWorkOutComponents ($columnName, $columnDescription, $columnType) VALUES
       ("${name.trim()}","${desc.trim()}","${type.trim()}")
-      '''
-    );
+      ''');
   }
 
-  Future insertCourse(String courseName, String courseNumber, String courseTimes ) async {
+  Future insertCourse(
+      String courseName, String courseNumber, String courseTimes) async {
     Database db = await instance.database;
-    return await db.execute(
-      '''
+    return await db.execute('''
       INSERT INTO $_tableWorkOutCourses ($columnName,  $columnCourseNumber, $columnCourseTimes) VALUES
       ("$courseName","$courseNumber","${courseTimes.trim()}")
-      '''
-    );
+      ''');
   }
 
-  Future updateCourse(String courseName, String courseNumber, String courseTimes, int id) async {
+  Future updateCourse(String courseName, String courseNumber,
+      String courseTimes, int id) async {
     Database db = await instance.database;
-    return await db.execute(
-      '''
+    return await db.execute('''
       UPDATE $_tableWorkOutCourses
       SET $columnName = "$courseName",$columnCourseNumber = "$courseNumber", $columnCourseTimes = "${courseTimes.trim()}"
       WHERE $columnId = $id;
-      '''
-    );
+      ''');
   }
 
-  static final String _openingSQLInsertion = 
-  '''
+  Future updateComponent(String componentName, String componentDescription,
+      String type, int id) async {
+    Database db = await instance.database;
+    return await db.execute('''
+      UPDATE $_tableWorkOutComponents 
+      SET $columnName = "$componentName",$columnDescription = "$componentDescription", $columnType = "$type"
+      WHERE $columnId = "$id";
+      ''');
+  }
+
+  Future deleteComponent(int id) async {
+    Database db = await instance.database;
+    await deleteInstancesOfComponent(id);
+    return await db.execute('''
+      DELETE FROM $_tableWorkOutComponents
+      WHERE $columnId = $id;
+      ''');
+  }
+
+  Future deleteInstancesOfComponent(int id) async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> _tempMapList;
+    String _currentCourseNumber;
+    List<String> _currentCourseNumberList;
+    String _currentTimes;
+    List<String> _currentTimesList;
+
+    List<dynamic> _tempMap2;
+    List<Map> _temp1;
+    var _temp2;
+    Map _temp3;
+
+    _tempMapList = await db.query(_tableWorkOutCourses,
+        columns: [columnCourseNumber, columnCourseTimes]);
+
+    for (int index1 = 0; index1 < _tempMapList.length; index1++) {
+      _temp1 = _tempMapList[index1];
+      _temp2 = _tempMapList[index1].values.last;
+      _temp3 = {};
+      _temp3.addAll(_temp1);
+      _temp3.addAll(_temp2);
+
+      _currentCourseNumber = _temp3.values.first;
+      print(_currentCourseNumber);
+      _currentCourseNumberList = _currentCourseNumber.split('#');
+      print(_currentCourseNumberList);
+
+      _currentTimes = _temp3.values.last;
+      _currentTimesList = _currentTimes.split('#');
+      print(_currentTimesList);
+
+      for (int index = 0; index < _currentCourseNumberList.length; index++) {
+        if (int.parse(_currentCourseNumberList[index]) == id) {
+          _currentCourseNumberList.removeAt(index);
+          _currentTimesList.removeAt(index);
+        }
+        print(_currentTimesList);
+        print(_currentCourseNumberList);
+      }
+    }
+  }
+
+  static final String _openingSQLInsertion = '''
   ("Burpees", "Fun", "Reps"),
   ("Buttterfly Stretch", "Sit in butterfly position and then pull head to knees", "Time"),
   ("Dumbell Front Extended", "Lift dumbell straight in front of you", "Reps"),
@@ -173,5 +231,5 @@ class DatabaseManager {
   ("Standing Hamstring Stretch","Reach down touch toes","Time"),
   ("Standing Quad Stretch","Stand up straight and pull one leg in behind","Time"),
   ("Triceps Stretch","Reach one hand behind back and stretch","Time")
-  '''; 
+  ''';
 }

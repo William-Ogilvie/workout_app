@@ -1,6 +1,8 @@
 
 
 
+
+
 import 'package:flutter/material.dart';
 import 'package:workout_app_5/core/screens/create_workout_selection.dart';
 import 'package:workout_app_5/core/screens/edit_workout_screen.dart';
@@ -9,6 +11,8 @@ import 'package:workout_app_5/core/screens/workout_creation/create_components_sc
 import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_second_screen.dart';
 import 'package:workout_app_5/core/screens/workout_description.dart';
+import 'package:workout_app_5/core/screens/workout_editing/edit_components_screen.dart';
+import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_course_selection.dart';
 import 'package:workout_app_5/core/screens/workout_manager_screen.dart';
 import 'package:workout_app_5/core/screens/workout_selection.dart';
@@ -53,6 +57,14 @@ class RouteGenerator {
       case EditCourseSelectionScreen.id:
         return MaterialPageRoute(
           builder: (context) => EditCourseSelectionScreen(),
+        );
+      case EditComponentsSelectionScreen.id:
+        return MaterialPageRoute(
+          builder: (context) => EditComponentsSelectionScreen(),
+        );
+      case EditComponentsScreen.id:
+        return MaterialPageRoute(
+          builder: (context) => EditComponentsScreen(),
         );
     }
   }
