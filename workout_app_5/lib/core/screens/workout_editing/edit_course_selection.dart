@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
-import 'package:workout_app_5/core/screens/workout_selection.dart';
+
 class EditCourseSelectionScreen extends StatelessWidget {
   static const id = 'edit_course_selection_screen';
   

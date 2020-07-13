@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/editing/edit_components_provider.dart';
+import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
 import 'package:workout_app_5/widgets/buttons/no_button.dart';
 
 class EditComponentsScreen extends StatelessWidget {
@@ -133,24 +134,26 @@ class EditComponentsScreen extends StatelessWidget {
                       child: RaisedButton(
                         onPressed: () {
                           showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                      'Do you want to delete this component?'),
-                                  actions: <Widget>[
-                                    NoButton(),
-                                    FlatButton(
-                                      child: Text('Yes'),
-                                      onPressed: () {
-                                        editComponentsProvider
-                                            .deleteComponent();
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                    'Are you sure you want to delete this component?'),
+                                actions: <Widget>[
+                                  NoButton(),
+                                  FlatButton(
+                                    child: Text('Yes'),
+                                    onPressed: () async {
+                                      await editComponentsProvider.deleteComponent();
+                                      await editComponentsProvider.launch();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Text(
                           'Delete',

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:workout_app_5/core/components/database/database_storage.dart';
 
 class DatabaseManager {
   static final _dbName = 'primaryDatabase.db';
@@ -176,40 +175,80 @@ class DatabaseManager {
     List<String> _currentCourseNumberList;
     String _currentTimes;
     List<String> _currentTimesList;
-
-    List<dynamic> _tempMap2;
-    List<Map> _temp1;
-    var _temp2;
-    Map _temp3;
+    bool rebuild = false;
 
     _tempMapList = await db.query(_tableWorkOutCourses,
-        columns: [columnCourseNumber, columnCourseTimes]);
+        columns: [columnCourseNumber, columnName, columnId, columnCourseTimes]);
 
     for (int index1 = 0; index1 < _tempMapList.length; index1++) {
-      _temp1 = _tempMapList[index1];
-      _temp2 = _tempMapList[index1].values.last;
-      _temp3 = {};
-      _temp3.addAll(_temp1);
-      _temp3.addAll(_temp2);
+      _currentCourseNumber = _tempMapList[index1].values.first;
 
-      _currentCourseNumber = _temp3.values.first;
-      print(_currentCourseNumber);
       _currentCourseNumberList = _currentCourseNumber.split('#');
-      print(_currentCourseNumberList);
 
-      _currentTimes = _temp3.values.last;
+      _currentTimes = _tempMapList[index1].values.last;
       _currentTimesList = _currentTimes.split('#');
-      print(_currentTimesList);
+
+      print('Pre times are $_currentTimesList');
+      print('Pre course numbers are $_currentCourseNumberList');
 
       for (int index = 0; index < _currentCourseNumberList.length; index++) {
         if (int.parse(_currentCourseNumberList[index]) == id) {
           _currentCourseNumberList.removeAt(index);
           _currentTimesList.removeAt(index);
+          rebuild = true;
         }
-        print(_currentTimesList);
-        print(_currentCourseNumberList);
+      }
+      print('Current times are $_currentTimesList');
+      print('Current course numbers$_currentCourseNumberList');
+
+      if (rebuild == true) {
+        String tempSQLNumber = '';
+        String tempSQLReps = '';
+        String workOutName = _tempMapList[index1].values.elementAt(1);
+        int id = _tempMapList[index1].values.elementAt(2);
+
+
+        for (int _index = 0;
+            _index < _currentCourseNumberList.length;
+            _index++) {
+          switch (_index) {
+            case 0:
+              tempSQLNumber = '${_currentCourseNumberList[_index]}';
+              tempSQLReps = '${_currentTimesList[_index]}';
+              break;
+            default:
+              tempSQLNumber =
+                  '$tempSQLNumber#${_currentCourseNumberList[_index]}';
+              tempSQLReps = '$tempSQLReps#${_currentTimesList[_index]}';
+          }
+        }
+
+
+        tempSQLNumber.replaceRange(
+            tempSQLNumber.length, tempSQLNumber.length, '');
+        tempSQLNumber.trim();
+        tempSQLReps.replaceRange(tempSQLReps.length, tempSQLReps.length, '');
+        tempSQLReps.trim();
+        print(tempSQLNumber);
+        print(tempSQLReps);
+
+        DatabaseManager.instance
+            .updateCourse(workOutName, tempSQLNumber, tempSQLReps, id);
+
       }
     }
+    print('Final times are $_currentTimesList');
+    print('Final course numbers $_currentCourseNumberList');
+  }
+
+  Future deleteCourse(int id) async {
+    Database db = await instance.database;
+    db.execute(
+      '''
+      DELETE FROM $_tableWorkOutCourses 
+      WHERE $columnId = $id;
+      '''
+    );
   }
 
   static final String _openingSQLInsertion = '''

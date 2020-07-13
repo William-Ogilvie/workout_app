@@ -119,13 +119,6 @@ class CreateComponenetsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Flexible(
-                  child: RaisedButton(
-                    onPressed: () {
-                      DatabaseManager.instance.deleteComponent(3);
-                    },
-                  ),
-                ),
               ],
             ),
           ),

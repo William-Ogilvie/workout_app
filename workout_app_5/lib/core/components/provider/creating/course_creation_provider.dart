@@ -290,4 +290,8 @@ class CourseCreationProvider extends ChangeNotifier {
     DatabaseManager.instance
         .updateCourse(workOutName, tempSQLNumber, tempSQLReps, _databaseCourseId);
   }
+
+  void deleteCourse() {
+    DatabaseManager.instance.deleteCourse(_databaseCourseId);
+  }
 }

@@ -52,6 +52,7 @@ class EditComponentsProvider extends ChangeNotifier {
   }
 
   void launch() async{
+    statelessEditingComponetCardList = [];
     _mapList = await DatabaseManager.instance.querryAllComponenets();
     
     for (int _index = 0; _index < _mapList.length; _index++) {
@@ -65,6 +66,7 @@ class EditComponentsProvider extends ChangeNotifier {
 
       statelessEditingComponetCardList.add(_statelessEditingComponenetCard);
     }
+    statelessEditingComponetCardList = statelessEditingComponetCardList;
   }
 
   void saveWorkOutComponent() async{
@@ -80,6 +82,10 @@ class EditComponentsProvider extends ChangeNotifier {
 
   void deleteComponent() async {
     await DatabaseManager.instance.deleteComponent(statelessEditingComponetCardList[indexInUse].databaseId);
+  }
+
+  void rebuildList() {
+    statelessEditingComponetCardList = statelessEditingComponetCardList;
   }
   
 }
