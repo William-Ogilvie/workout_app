@@ -32,19 +32,20 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
+            Flexible(
               flex: 2,
               child: SizedBox(
                 height: 100.0,
               ),
             ),
-            Expanded(
+            Flexible(
               flex: 6,
               child: ReusableButton(
                 borderRadius: 30.0,
                 elevation: 8.0,
                 padding: 0.0,
                 width: 300.0,
+                height: 250.0,
                 text: 'Select Workout',
                 textStyle: kDefaultTextStyle,
                 onPressed: () async{
@@ -53,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                 },
               ),
             ),
-            Expanded(
+            Flexible(
               flex: 1,
               child: SizedBox(
                 height: 50.0,
@@ -61,13 +62,14 @@ class WelcomeScreen extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Expanded(
+                Flexible(
                   flex: 6,
                   child: ReusableButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
-                    width: 300.0,
+                    width: 200.0,
+                    height: 150.0,
                     text: 'Create Workout',
                     textStyle: kDefaultTextStyle,
                     onPressed: () {
@@ -75,13 +77,14 @@ class WelcomeScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Expanded(
+                Flexible(
                   flex: 6,
                   child: ReusableButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
-                    width: 300.0,
+                    width: 200.0,
+                    height: 150.0,
                     text: 'Edit \nWorkout',
                     textStyle: kDefaultTextStyle,
                     onPressed: () {
@@ -91,37 +94,37 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
-              child: ReusableButton(
-                borderRadius: 30.0,
-                elevation: 8.0,
-                padding: 0.0,
-                width: 300.0,
-                text: 'Querry All',
-                textStyle: kDefaultTextStyle,
-                onPressed: () async {
-                  List<Map<String, dynamic>> querryRows =
-                      await DatabaseManager.instance.querryAll();
-                  print(querryRows[0]);
-                  print(querryRows[5]);
-                  print(querryRows);
-                },
-              ),
-            ),
-            Expanded(
-              child: ReusableButton(
-                borderRadius: 30.0,
-                elevation: 8.0,
-                padding: 0.0,
-                width: 300.0,
-                text: 'Delete database',
-                textStyle: kDefaultTextStyle,
-                onPressed: () async {
-                  DatabaseManager.instance.deletedatabase();
-                },
-              ),
-            ),
-            Expanded(
+            // Flexible(
+            //   child: ReusableButton(
+            //     borderRadius: 30.0,
+            //     elevation: 8.0,
+            //     padding: 0.0,
+            //     width: 300.0,
+            //     text: 'Querry All',
+            //     textStyle: kDefaultTextStyle,
+            //     onPressed: () async {
+            //       List<Map<String, dynamic>> querryRows =
+            //           await DatabaseManager.instance.querryAll();
+            //       print(querryRows[0]);
+            //       print(querryRows[5]);
+            //       print(querryRows);
+            //     },
+            //   ),
+            // ),
+            // Flexible(
+            //   child: ReusableButton(
+            //     borderRadius: 30.0,
+            //     elevation: 8.0,
+            //     padding: 0.0,
+            //     width: 300.0,
+            //     text: 'Delete database',
+            //     textStyle: kDefaultTextStyle,
+            //     onPressed: () async {
+            //       DatabaseManager.instance.deletedatabase();
+            //     },
+            //   ),
+            // ),
+            Flexible(
               flex: 2,
               child: SizedBox(
                 height: 100.0,

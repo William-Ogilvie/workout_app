@@ -44,7 +44,9 @@ class CreateFloatingActionButton extends StatelessWidget {
     return Consumer<CourseCreationProvider>(
       builder: (context, courseCreationProvider, child) => FloatingActionButton(
         onPressed: () {
-          courseCreationProvider.createWithSelected();
+          courseCreationProvider.alreadyPushed
+              ? courseCreationProvider.addwithSelected()
+              : courseCreationProvider.createWithSelected();
           courseCreationProvider.alreadyPushed
               ? Navigator.pop(context)
               : Navigator.pushReplacementNamed(

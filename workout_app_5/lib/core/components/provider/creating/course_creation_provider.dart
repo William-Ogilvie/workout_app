@@ -79,6 +79,7 @@ class CourseCreationProvider extends ChangeNotifier {
   }
 
   void launch(bool edit) async {
+    activeList = [];
     edit ? print('null2') : editMode = false;
     statelessCreationCardList = [];
     editMode ? print('null') : statelessCreatedCardList = [];
@@ -150,6 +151,24 @@ class CourseCreationProvider extends ChangeNotifier {
     int _newCardIndex = 0;
     for (_index = 0; _index < activeList.length; _index++) {
       if (activeList[_index] == true) {
+        StatelessCreatedCard tempCard = StatelessCreatedCard(
+          cardIndex: _newCardIndex,
+          description: _statelessCreationCardList[_index].description,
+          workOutName: _statelessCreationCardList[_index].workOutName,
+          type: _statelessCreationCardList[_index].type,
+          databaseId: _statelessCreationCardList[_index].databaseId,
+          key: UniqueKey(),
+        );
+        _newCardIndex++;
+        statelessCreatedCardList.add(tempCard);
+      }
+    }
+  }
+  
+  void addwithSelected() {
+    int _newCardIndex = statelessCreatedCardList.length;
+    for (_index = 0; _index < activeList.length; _index++) {
+      if(activeList[_index] == true) {
         StatelessCreatedCard tempCard = StatelessCreatedCard(
           cardIndex: _newCardIndex,
           description: _statelessCreationCardList[_index].description,

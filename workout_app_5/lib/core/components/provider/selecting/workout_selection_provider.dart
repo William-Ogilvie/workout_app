@@ -53,5 +53,6 @@ class WorkOutSelectionProvider extends ChangeNotifier {
 
       statelessEditingSelectionCourseCard.add(tempCard);
     }
+    statelessEditingSelectionCourseCard = statelessEditingSelectionCourseCard;
   }
 }
