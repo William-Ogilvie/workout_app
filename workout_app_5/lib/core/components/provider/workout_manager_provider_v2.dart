@@ -174,6 +174,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   }
 
   void setCancelTimerTrue() {
+    _pauseTimer = false;
     _cancelTimer = true;
   }
 

@@ -151,11 +151,11 @@ class WorkOutManagerScreen extends StatelessWidget {
                                         child: FlatButton(
                                           child: Icon(Icons.clear),
                                           onPressed: () {
-                                            Navigator.pop(context);
                                             workOutManagerProviderV2
                                                 .disableTimer();
                                             workOutManagerProviderV2
                                                 .clearIndex();
+                                            Navigator.pop(context);
                                           },
                                         ),
                                       ),
