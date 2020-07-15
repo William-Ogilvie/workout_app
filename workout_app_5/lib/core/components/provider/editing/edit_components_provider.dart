@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
+import 'package:workout_app_5/enums/already_saved.dart';
 import 'package:workout_app_5/widgets/editing/stateless_editing_components.dart';
 
 class EditComponentsProvider extends ChangeNotifier {
@@ -37,6 +38,15 @@ class EditComponentsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  SavedState _alreadySaved = SavedState.noChange;
+
+  SavedState get alreadySaved => _alreadySaved;
+
+  set alreadySaved(SavedState val) {
+    _alreadySaved = val;
+    notifyListeners();
+  }
+
   
 
   void saveName(String name) {
@@ -52,6 +62,7 @@ class EditComponentsProvider extends ChangeNotifier {
   }
 
   void launch() async{
+    alreadySaved = SavedState.noChange;
     statelessEditingComponetCardList = [];
     _mapList = await DatabaseManager.instance.querryAllComponenets();
     
@@ -76,6 +87,7 @@ class EditComponentsProvider extends ChangeNotifier {
     //await DatabaseManager.instance.insertComponent(_workOutName, _workOutDescription, timeOrReps);
     await DatabaseManager.instance.updateComponent(_workOutName, _workOutDescription, timeOrReps, statelessEditingComponetCardList[indexInUse].databaseId);
     print('Items added');
+    alreadySaved = SavedState.saved;
     _workOutName = '';
     _workOutDescription = '';
   }

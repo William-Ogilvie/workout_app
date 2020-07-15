@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
+import 'package:workout_app_5/core/components/provider/creating/component_creation_provider.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_components_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
+import 'package:workout_app_5/enums/already_saved.dart';
 import 'package:workout_app_5/widgets/reusable_button.dart';
 
 class CreateWorkOutSelection extends StatelessWidget {
@@ -12,7 +14,8 @@ class CreateWorkOutSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     CourseCreationProvider _courseCreationProvider =
         Provider.of<CourseCreationProvider>(context, listen: false);
-    
+    ComponentCreationProvider _componentCreationProvider = Provider.of<ComponentCreationProvider>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -34,6 +37,7 @@ class CreateWorkOutSelection extends StatelessWidget {
                     text: 'Create Workout Componenets',
                     textStyle: kDefaultTextStyle,
                     onPressed: () {
+                      _componentCreationProvider.alreadySaved = SavedState.noChange;
                       Navigator.pushNamed(context, CreateComponenetsScreen.id);
                     },
                   ),

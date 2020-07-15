@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workout_app_5/constants/text_styles.dart';
-import 'package:workout_app_5/core/components/database/database_mangaer.dart';
 import 'package:workout_app_5/core/components/provider/creating/component_creation_provider.dart';
+import 'package:workout_app_5/enums/already_saved.dart';
+import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
 class CreateComponenetsScreen extends StatelessWidget {
   static const id = 'create_component_screen';
@@ -24,6 +24,24 @@ class CreateComponenetsScreen extends StatelessWidget {
         body: Container(
           margin: EdgeInsets.all(24),
           child: Form(
+            onWillPop: () async {
+              if (componentCreationProvider.alreadySaved == SavedState.change) {
+                return showDialog(
+                  context: context,
+                  builder: (context) => YesNoAlertDialog(
+                    titleText:
+                        'Are you sure you want to leave unsaved changes?',
+                    noButtonFunction: () {
+                      Navigator.pop(context, false);
+                    },
+                    yesButtonFunction: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                );
+              }
+              return true;
+            },
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -41,6 +59,10 @@ class CreateComponenetsScreen extends StatelessWidget {
                     onSaved: (String value) {
                       componentCreationProvider.saveName(value);
                     },
+                    onChanged: (String val) {
+                      componentCreationProvider.alreadySaved =
+                          SavedState.change;
+                    },
                   ),
                 ),
                 Flexible(
@@ -56,6 +78,10 @@ class CreateComponenetsScreen extends StatelessWidget {
                     },
                     onSaved: (String value) {
                       componentCreationProvider.saveDescription(value);
+                    },
+                    onChanged: (String val) {
+                      componentCreationProvider.alreadySaved =
+                          SavedState.change;
                     },
                   ),
                 ),
@@ -79,6 +105,8 @@ class CreateComponenetsScreen extends StatelessWidget {
                         ],
                         onChanged: (value) {
                           componentCreationProvider.saveTimeOrReps(value);
+                          componentCreationProvider.alreadySaved =
+                              SavedState.change;
                         },
                       ),
                     ),

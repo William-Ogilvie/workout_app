@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
+import 'package:workout_app_5/enums/already_saved.dart';
 
 class ComponentCreationProvider extends ChangeNotifier {
 
@@ -18,7 +19,14 @@ class ComponentCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
+  SavedState _alreadySaved = SavedState.noChange;
+
+  SavedState get alreadySaved => _alreadySaved;
+
+  set alreadySaved(SavedState val) {
+    _alreadySaved = val;
+    notifyListeners();
+  }
 
 
   void saveName(String name) {
@@ -33,6 +41,7 @@ class ComponentCreationProvider extends ChangeNotifier {
     timeOrReps = type;
   }
 
+ 
 
   void insertWorkOutComponent() async{
     print(_workOutName);
@@ -42,6 +51,7 @@ class ComponentCreationProvider extends ChangeNotifier {
     print('Items added');
     _workOutName = '';
     _workOutDescription = '';
+    alreadySaved = SavedState.saved;
   }
 
 

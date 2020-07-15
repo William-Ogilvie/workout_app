@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/editing/edit_components_provider.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_components_screen.dart';
+import 'package:workout_app_5/enums/already_saved.dart';
 
 class StatelessEditingComponenetCard extends StatelessWidget {
   final String workOutName;
@@ -24,6 +25,7 @@ class StatelessEditingComponenetCard extends StatelessWidget {
           leading: Text(type),
           selected: false,
           onTap: () {
+            editComponentsProvider.alreadySaved = SavedState.noChange;
             editComponentsProvider.indexInUse = cardIndex;
             Navigator.pushNamed(context, EditComponentsScreen.id);
           },

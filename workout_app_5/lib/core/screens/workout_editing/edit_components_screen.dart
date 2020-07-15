@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/editing/edit_components_provider.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
+import 'package:workout_app_5/enums/already_saved.dart';
 import 'package:workout_app_5/widgets/buttons/no_button.dart';
+import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
 class EditComponentsScreen extends StatelessWidget {
   static const id = 'edit_components_screen';
@@ -25,6 +27,23 @@ class EditComponentsScreen extends StatelessWidget {
             body: Container(
               margin: EdgeInsets.all(24),
               child: Form(
+                onWillPop: () async{
+                  if (editComponentsProvider.alreadySaved == SavedState.change) {
+                    return showDialog(
+                      context: context,
+                      builder: (context) => YesNoAlertDialog(
+                        titleText: 'Are you sure you want to leave unsaved changes?',
+                        noButtonFunction: () {
+                          Navigator.pop(context,false);
+                        },
+                        yesButtonFunction: () {
+                          Navigator.pop(context,true);
+                        },
+                      ),
+                    );
+                  }
+                  return true; 
+                },
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -46,6 +65,9 @@ class EditComponentsScreen extends StatelessWidget {
                         onSaved: (String value) {
                           editComponentsProvider.saveName(value);
                         },
+                        onChanged: (String val) {
+                          editComponentsProvider.alreadySaved = SavedState.change;
+                        },
                       ),
                     ),
                     Flexible(
@@ -65,6 +87,9 @@ class EditComponentsScreen extends StatelessWidget {
                         },
                         onSaved: (String value) {
                           editComponentsProvider.saveDescription(value);
+                        },
+                        onChanged: (String val) {
+                          editComponentsProvider.alreadySaved = SavedState.change;
                         },
                       ),
                     ),
@@ -87,6 +112,7 @@ class EditComponentsScreen extends StatelessWidget {
                               ),
                             ],
                             onChanged: (value) {
+                              editComponentsProvider.alreadySaved = SavedState.change;
                               editComponentsProvider.saveTimeOrReps(value);
                             },
                           ),
@@ -144,7 +170,8 @@ class EditComponentsScreen extends StatelessWidget {
                                   FlatButton(
                                     child: Text('Yes'),
                                     onPressed: () async {
-                                      await editComponentsProvider.deleteComponent();
+                                      await editComponentsProvider
+                                          .deleteComponent();
                                       await editComponentsProvider.launch();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
