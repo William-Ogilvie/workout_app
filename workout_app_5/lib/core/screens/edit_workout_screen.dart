@@ -18,8 +18,9 @@ class EditWorkOutScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Expanded(
+            Flexible(
               flex: 1,
               child: SizedBox(
                 height: 100.0,
@@ -27,12 +28,13 @@ class EditWorkOutScreen extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Expanded(
+                Flexible(
                   child: ReusableButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
-                    width: 300.0,
+                    width: 250.0,
+                    height: 200.0,
                     text: 'Edit Workout Componenets',
                     textStyle: kDefaultTextStyle,
                     onPressed: () async{
@@ -41,12 +43,13 @@ class EditWorkOutScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Expanded(
+                Flexible(
                   child: ReusableButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
-                    width: 300.0,
+                    width: 250.0,
+                    height: 200.0,
                     text: 'Edit Workout Course',
                     textStyle: kDefaultTextStyle,
                     onPressed: () async{
@@ -57,7 +60,7 @@ class EditWorkOutScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
+            Flexible(
               flex: 1,
               child: SizedBox(
                 height: 100.0,

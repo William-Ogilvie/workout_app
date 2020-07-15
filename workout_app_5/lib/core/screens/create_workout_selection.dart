@@ -19,8 +19,9 @@ class CreateWorkOutSelection extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Expanded(
+            Flexible(
               flex: 1,
               child: SizedBox(
                 height: 100.0,
@@ -28,12 +29,13 @@ class CreateWorkOutSelection extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Expanded(
+                Flexible(
                   child: ReusableButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
-                    width: 300.0,
+                    width: 250.0,
+                    height: 200.0,
                     text: 'Create Workout Componenets',
                     textStyle: kDefaultTextStyle,
                     onPressed: () {
@@ -42,12 +44,13 @@ class CreateWorkOutSelection extends StatelessWidget {
                     },
                   ),
                 ),
-                Expanded(
+                Flexible(
                   child: ReusableButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
-                    width: 300.0,
+                    width: 250.0,
+                    height: 200.0,
                     text: 'Create Workout Course',
                     textStyle: kDefaultTextStyle,
                     onPressed: () async{
@@ -58,7 +61,7 @@ class CreateWorkOutSelection extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
+            Flexible(
               flex: 1,
               child: SizedBox(
                 height: 100.0,

@@ -11,31 +11,49 @@ class WorkOutDescriptionScreen extends StatelessWidget {
     WorkOutManagerProviderV2 workOutManagerProviderV2 =
         Provider.of<WorkOutManagerProviderV2>(context, listen: false);
 
-    return Scaffold(
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: FlatButton(
-                child: Icon(Icons.clear,),
-                onPressed: () {
-                  Navigator.pop(context);
-                  workOutManagerProviderV2.restartTimer();
-                },
-              ),
+    return WillPopScope(
+      onWillPop: () async {
+        workOutManagerProviderV2.restartTimer();
+        return true;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: FlatButton(
+                    child: Icon(
+                      Icons.clear,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      workOutManagerProviderV2.restartTimer();
+                    },
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Text(
+                    workOutManagerProviderV2.workOutDescription,
+                    style: kTitleTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: SizedBox(),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: SizedBox(),
+                ),
+              ],
             ),
-            Expanded(
-              flex: 5,
-              child: Text(
-                workOutManagerProviderV2.workOutDescription,
-                style: kTitleTextStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

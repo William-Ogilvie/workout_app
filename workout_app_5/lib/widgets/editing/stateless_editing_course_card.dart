@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
-import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_second_screen.dart';
-import 'package:workout_app_5/widgets/selection/stateless_selection_card.dart';
+
 
 class StatelessEditingSelectionCourseCard extends StatelessWidget {
   final String courseName;
@@ -25,8 +24,8 @@ class StatelessEditingSelectionCourseCard extends StatelessWidget {
           title: Text('$courseName'),
           enabled: true,
           selected: false,
-          onTap: () async{
-            courseCreationProvider.launchEditMode(databaseId);
+          onTap: () {
+            courseCreationProvider.launchEditMode(databaseId, courseName);
             Navigator.pushNamed(context, CreateCourseSecondScreen.id);
           },
         ),      

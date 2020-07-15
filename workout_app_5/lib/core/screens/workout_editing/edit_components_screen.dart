@@ -27,22 +27,24 @@ class EditComponentsScreen extends StatelessWidget {
             body: Container(
               margin: EdgeInsets.all(24),
               child: Form(
-                onWillPop: () async{
-                  if (editComponentsProvider.alreadySaved == SavedState.change) {
+                onWillPop: () async {
+                  if (editComponentsProvider.alreadySaved ==
+                      SavedState.change) {
                     return showDialog(
                       context: context,
                       builder: (context) => YesNoAlertDialog(
-                        titleText: 'Are you sure you want to leave unsaved changes?',
+                        titleText:
+                            'Are you sure you want to leave unsaved changes?',
                         noButtonFunction: () {
-                          Navigator.pop(context,false);
+                          Navigator.pop(context, false);
                         },
                         yesButtonFunction: () {
-                          Navigator.pop(context,true);
+                          Navigator.pop(context, true);
                         },
                       ),
                     );
                   }
-                  return true; 
+                  return true;
                 },
                 key: _formKey,
                 child: Column(
@@ -66,7 +68,8 @@ class EditComponentsScreen extends StatelessWidget {
                           editComponentsProvider.saveName(value);
                         },
                         onChanged: (String val) {
-                          editComponentsProvider.alreadySaved = SavedState.change;
+                          editComponentsProvider.alreadySaved =
+                              SavedState.change;
                         },
                       ),
                     ),
@@ -89,7 +92,8 @@ class EditComponentsScreen extends StatelessWidget {
                           editComponentsProvider.saveDescription(value);
                         },
                         onChanged: (String val) {
-                          editComponentsProvider.alreadySaved = SavedState.change;
+                          editComponentsProvider.alreadySaved =
+                              SavedState.change;
                         },
                       ),
                     ),
@@ -100,7 +104,10 @@ class EditComponentsScreen extends StatelessWidget {
                         child: Consumer<EditComponentsProvider>(
                           builder: (context, editComponentsProvider, child) =>
                               DropdownButton<String>(
-                            value: editComponentsProvider.timeOrReps,
+                            value: editComponentsProvider
+                            .statelessEditingComponetCardList[
+                                editComponentsProvider.indexInUse]
+                            .type,
                             items: [
                               DropdownMenuItem(
                                 child: Text('Reps'),
@@ -112,7 +119,8 @@ class EditComponentsScreen extends StatelessWidget {
                               ),
                             ],
                             onChanged: (value) {
-                              editComponentsProvider.alreadySaved = SavedState.change;
+                              editComponentsProvider.alreadySaved =
+                                  SavedState.change;
                               editComponentsProvider.saveTimeOrReps(value);
                             },
                           ),
@@ -131,19 +139,24 @@ class EditComponentsScreen extends StatelessWidget {
                             return;
                           }
 
-                          _formKey.currentState.save();
-
                           //editComponentsProvider.insertWorkOutComponent();
-                          editComponentsProvider.saveWorkOutComponent();
+
                           // workOutDescriptionController.clear();
                           // workOutNameController.clear();
 
                           showDialog(
-                            barrierDismissible: true,
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Workout Component Saved'),
+                              return YesNoAlertDialog(
+                                titleText: 'Are you sure you want to save?',
+                                noButtonFunction: () {
+                                  Navigator.pop(context, false);
+                                },
+                                yesButtonFunction: () {
+                                  _formKey.currentState.save();
+                                  editComponentsProvider.saveWorkOutComponent();
+                                  Navigator.pop(context, true);
+                                },
                               );
                             },
                           );
@@ -162,22 +175,19 @@ class EditComponentsScreen extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(
-                                    'Are you sure you want to delete this component?'),
-                                actions: <Widget>[
-                                  NoButton(),
-                                  FlatButton(
-                                    child: Text('Yes'),
-                                    onPressed: () async {
-                                      await editComponentsProvider
-                                          .deleteComponent();
-                                      await editComponentsProvider.launch();
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
+                              return YesNoAlertDialog(
+                                titleText:
+                                    'Are you sure you want to delete this component?',
+                                noButtonFunction: () {
+                                  Navigator.pop(context);
+                                },
+                                yesButtonFunction: () async {
+                                  await editComponentsProvider
+                                      .deleteComponent();
+                                  await editComponentsProvider.launch();
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
                               );
                             },
                           );

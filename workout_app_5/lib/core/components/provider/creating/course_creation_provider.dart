@@ -65,6 +65,14 @@ class CourseCreationProvider extends ChangeNotifier {
 
   String _courseNumberString;
   String _courseNumberTimes;
+  String _courseNameString;
+
+  String get courseNameString => _courseNameString;
+
+  set courseNameString(String val) {
+    _courseNameString = val;
+    notifyListeners();
+  }
 
   List<String> _courseNumberStringList;
   List<String> _courseNumberTimesList;
@@ -100,11 +108,12 @@ class CourseCreationProvider extends ChangeNotifier {
     }
   }
 
-  void launchEditMode(int id) async {
+  void launchEditMode(int id, String courseName) async {
     statelessCreationCardList = [];
     statelessCreatedCardList = [];
     editMode = true;
     _databaseCourseId = id; 
+    courseNameString = courseName;
 
     var temp = await DatabaseManager.instance.querryWorkOutCourse(id);
     _courseNumberString = temp.values.first.toString();
@@ -279,6 +288,16 @@ class CourseCreationProvider extends ChangeNotifier {
 
     DatabaseManager.instance
         .insertCourse(workOutName, tempSQLNumber, tempSQLReps);
+  }
+
+  bool checkTimesNull() {
+    for(int index = 0; index < statelessCreatedCardList.length; index++) {
+      if(statelessCreatedCardList[index].timeNumber == null) {
+        print('Ha ha');
+        return true;
+      }
+    }
+    return false;
   }
 
   void saveWorkOutCourse() {
