@@ -27,6 +27,7 @@ class StatelessEditingComponenetCard extends StatelessWidget {
           onTap: () {
             editComponentsProvider.alreadySaved = SavedState.noChange;
             editComponentsProvider.indexInUse = cardIndex;
+            editComponentsProvider.timeOrReps = type;
             Navigator.pushNamed(context, EditComponentsScreen.id);
           },
         ),      

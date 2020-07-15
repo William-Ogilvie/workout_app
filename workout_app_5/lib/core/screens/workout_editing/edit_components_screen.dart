@@ -104,10 +104,7 @@ class EditComponentsScreen extends StatelessWidget {
                         child: Consumer<EditComponentsProvider>(
                           builder: (context, editComponentsProvider, child) =>
                               DropdownButton<String>(
-                            value: editComponentsProvider
-                            .statelessEditingComponetCardList[
-                                editComponentsProvider.indexInUse]
-                            .type,
+                            value: editComponentsProvider.timeOrReps,
                             items: [
                               DropdownMenuItem(
                                 child: Text('Reps'),

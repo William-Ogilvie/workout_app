@@ -19,156 +19,172 @@ class CreateCourseSecondScreen extends StatelessWidget {
     WorkOutSelectionProvider _workOutSelectionProvider =
         Provider.of<WorkOutSelectionProvider>(context, listen: false);
 
-    return SafeArea(
-      child: Scaffold(
-        body: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextFormField(
-                  autofocus: false,
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'A name is required';
-                    }
-                    return null;
-                  },
-                  initialValue: courseCreationProvider.editMode
-                      ? courseCreationProvider.courseNameString
-                      : '',
-                  decoration:
-                      InputDecoration(labelText: 'Enter a workout name'),
-                  onSaved: (String val) {
-                    courseCreationProvider.workOutName = val;
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  margin: EdgeInsets.all(12.0),
-                  child: CreatedSelectedListView(),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Flexible(
-                    child: RaisedButton(
-                      color: Colors.grey[300],
-                      child: Text('Get more components'),
-                      onPressed: () async {
-                        courseCreationProvider.editMode
-                            ? await courseCreationProvider.launch(true)
-                            : print('funny2');
-                        courseCreationProvider.alreadyPushed = true;
-                        courseCreationProvider.resetActiveList();
-                        Navigator.pushNamed(context, CreateCourseScreen.id);
-                      },
-                    ),
+    return WillPopScope(
+      onWillPop: () {
+        return showDialog(
+          context: context,
+          builder: (context) => YesNoAlertDialog(
+            titleText: 'Are you sure you want to leave? Any unsaved changes will not be saved',
+            yesButtonFunction: () {
+              Navigator.pop(context, true);
+            },
+            noButtonFunction: () {
+              Navigator.pop(context, false);
+            },
+          ),
+        );
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: TextFormField(
+                    autofocus: false,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'A name is required';
+                      }
+                      return null;
+                    },
+                    initialValue: courseCreationProvider.editMode
+                        ? courseCreationProvider.courseNameString
+                        : '',
+                    decoration:
+                        InputDecoration(labelText: 'Enter a workout name'),
+                    onSaved: (String val) {
+                      courseCreationProvider.workOutName = val;
+                    },
                   ),
-                  Consumer<CourseCreationProvider>(
-                    builder: (context, courseCreationProvider, child) =>
-                        Flexible(
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    margin: EdgeInsets.all(12.0),
+                    child: CreatedSelectedListView(),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Flexible(
                       child: RaisedButton(
-                        color: courseCreationProvider.removeMode
-                            ? Colors.red[400]
-                            : Colors.grey[300],
-                        child: Text('Remove'),
-                        onPressed: () {
-                          courseCreationProvider.removeMode
-                              ? courseCreationProvider.removeMode = false
-                              : courseCreationProvider.removeMode = true;
+                        color: Colors.grey[300],
+                        child: Text('Get more components'),
+                        onPressed: () async {
+                          courseCreationProvider.editMode
+                              ? await courseCreationProvider.launch(true)
+                              : print('funny2');
+                          courseCreationProvider.alreadyPushed = true;
+                          courseCreationProvider.resetActiveList();
+                          Navigator.pushNamed(context, CreateCourseScreen.id);
                         },
                       ),
                     ),
-                  ),
-                  Flexible(
-                    child: RaisedButton(
-                      color: Colors.grey[300],
-                      child: Text(
-                          courseCreationProvider.editMode ? 'Save' : 'Submit'),
-                      onPressed: () {
-                        if (!_formKey.currentState.validate()) {
-                          return;
-                        }
+                    Consumer<CourseCreationProvider>(
+                      builder: (context, courseCreationProvider, child) =>
+                          Flexible(
+                        child: RaisedButton(
+                          color: courseCreationProvider.removeMode
+                              ? Colors.red[400]
+                              : Colors.grey[300],
+                          child: Text('Remove'),
+                          onPressed: () {
+                            courseCreationProvider.removeMode
+                                ? courseCreationProvider.removeMode = false
+                                : courseCreationProvider.removeMode = true;
+                          },
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: RaisedButton(
+                        color: Colors.grey[300],
+                        child: Text(courseCreationProvider.editMode
+                            ? 'Save'
+                            : 'Submit'),
+                        onPressed: () {
+                          if (!_formKey.currentState.validate()) {
+                            return;
+                          }
 
-                        if (courseCreationProvider.checkTimesNull()) {
+                          if (courseCreationProvider.checkTimesNull()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => OkAlertDialog(
+                                titleText: 'Time values are required',
+                                okButtonFunction: () {
+                                  Navigator.pop(context, true);
+                                },
+                              ),
+                            );
+                            return;
+                          }
+
                           showDialog(
                             context: context,
-                            builder: (context) => OkAlertDialog(
-                              titleText: 'Time values are required',
-                              okButtonFunction: () {
-                                Navigator.pop(context, true);
+                            builder: (context) => YesNoAlertDialog(
+                              titleText: courseCreationProvider.editMode
+                                  ? 'Do you want to save?'
+                                  : 'Do you want to submit?',
+                              noButtonFunction: () {
+                                Navigator.pop(context);
+                              },
+                              yesButtonFunction: () {
+                                _formKey.currentState.save();
+                                courseCreationProvider.editMode
+                                    ? courseCreationProvider.saveWorkOutCourse()
+                                    : courseCreationProvider
+                                        .submitWorkOutCourse();
+                                Navigator.pop(context);
                               },
                             ),
                           );
-                          return;
-                        }
-
-                        showDialog(
-                          context: context,
-                          builder: (context) => YesNoAlertDialog(
-                            titleText: courseCreationProvider.editMode
-                                ? 'Do you want to save?'
-                                : 'Do you want to submit?',
-                            noButtonFunction: () {
-                              Navigator.pop(context);
-                            },
-                            yesButtonFunction: () {
-                              _formKey.currentState.save();
-                              courseCreationProvider.editMode
-                                  ? courseCreationProvider.saveWorkOutCourse()
-                                  : courseCreationProvider
-                                      .submitWorkOutCourse();
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        );
-                      },
+                        },
+                      ),
                     ),
-                  ),
-                  courseCreationProvider.editMode
-                      ? Flexible(
-                          child: RaisedButton(
-                            color: Colors.grey[300],
-                            child: Text('Delete'),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return YesNoAlertDialog(
-                                    titleText:
-                                        'Are you sure you want to delete this component?',
-                                    noButtonFunction: () {
-                                      Navigator.pop(context);
-                                    },
-                                    yesButtonFunction: () async {
-                                      await courseCreationProvider
-                                          .deleteCourse();
-                                      await _workOutSelectionProvider
-                                          .launchEditMode();
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                },
-                              );
-                            },
+                    courseCreationProvider.editMode
+                        ? Flexible(
+                            child: RaisedButton(
+                              color: Colors.grey[300],
+                              child: Text('Delete'),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return YesNoAlertDialog(
+                                      titleText:
+                                          'Are you sure you want to delete this component?',
+                                      noButtonFunction: () {
+                                        Navigator.pop(context);
+                                      },
+                                      yesButtonFunction: () async {
+                                        await courseCreationProvider
+                                            .deleteCourse();
+                                        await _workOutSelectionProvider
+                                            .launchEditMode();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          )
+                        : Flexible(
+                            child: SizedBox(
+                              height: 0.0,
+                              width: 0.0,
+                            ),
                           ),
-                        )
-                      : Flexible(
-                          child: SizedBox(
-                            height: 0.0,
-                            width: 0.0,
-                          ),
-                        ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
