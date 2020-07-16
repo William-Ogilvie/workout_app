@@ -4,6 +4,9 @@ import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/workout_manager_provider_v2.dart';
 import 'package:workout_app_5/core/screens/workout_description.dart';
 import 'package:workout_app_5/enums/workout_screen_state.dart';
+import 'package:workout_app_5/widgets/buttons/back_button.dart';
+import 'package:workout_app_5/widgets/buttons/question_button.dart';
+import 'package:workout_app_5/widgets/buttons/skip_button.dart';
 import 'package:workout_app_5/widgets/reusable_button.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
@@ -17,30 +20,31 @@ class WorkOutManagerScreen extends StatelessWidget {
               ? SafeArea(
                   child: Scaffold(
                     body: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Center(
-                            child: FlatButton(
-                              child: Icon(
-                                Icons.clear,
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
-                          Flexible(
-                            child: Center(
-                              child: Text(
-                                'Work out has ended press x to go back to selection screen.',
-                                style: kTitleTextStyle,
-                                textAlign: TextAlign.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment(-1.1, 0.6),
+                              child: StatelessBackButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
                               ),
                             ),
-                          ),
-                        ],
+                            Flexible(
+                              child: Center(
+                                child: Text(
+                                  'Work out has ended press the arrow to go back to selection screen.',
+                                  style: kTitleTextStyle,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -64,139 +68,164 @@ class WorkOutManagerScreen extends StatelessWidget {
                   },
                   child: workOutManagerProviderV2.workOutScreenState ==
                           WorkOutScreenState.rest
-                      ? Scaffold(
-                          body: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Flexible(
-                                  child: SizedBox(),
-                                ),
-                                Flexible(
-                                  child: Container(
-                                    child: Consumer<WorkOutManagerProviderV2>(
-                                      builder: (context,
-                                              workOutManagerProviderV2,
-                                              child) =>
-                                          Text(
-                                        workOutManagerProviderV2.currentTime
-                                            .toString(),
-                                        style: kTimerTextStyle.copyWith(
-                                            fontSize: 60.0),
+                      ? SafeArea(
+                          child: Scaffold(
+                            body: Center(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 3,
+                                    child: SizedBox(),
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Container(
+                                      child: Consumer<WorkOutManagerProviderV2>(
+                                        builder: (context,
+                                                workOutManagerProviderV2,
+                                                child) =>
+                                            Text(
+                                          workOutManagerProviderV2.currentTime
+                                              .toString(),
+                                          style: kTimerTextStyle.copyWith(
+                                              fontSize: 60.0),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                ReusableButton(
-                                  elevation: 8.0,
-                                  text: 'Skip',
-                                  textStyle: kTitleTextStyle,
-                                  padding: 10.0,
-                                  borderRadius: 30.0,
-                                  onPressed: () {
-                                    workOutManagerProviderV2
-                                        .setCancelTimerTrue();
-                                  },
-                                )
-                              ],
+                                  Expanded(
+                                    flex: 2,
+                                    child: SizedBox(),
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: SkipButton(
+                                      elevation: 8.0,
+                                      borderRadius: 8,
+                                      color: Color(0xFF2196F3),
+                                      iconData: Icons.arrow_forward,
+                                      onPressed: () {
+                                        workOutManagerProviderV2
+                                            .setCancelTimerTrue();
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: SizedBox(),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         )
                       : SafeArea(
                           child: Scaffold(
                             body: Center(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Flexible(
-                                        flex: 1,
-                                        child: ReusableButton(
-                                          padding: 8.0,
-                                          borderRadius: 12.0,
-                                          text: '?',
-                                          textStyle: kSmallerTextStyle,
-                                          elevation: 8.0,
-                                          onPressed: () {
-                                            workOutManagerProviderV2
-                                                .disableTimer();
-                                            Navigator.pushNamed(context,
-                                                WorkOutDescriptionScreen.id);
-                                          },
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Flexible(
+                                          child: StatelessBackButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    YesNoAlertDialog(
+                                                  titleText:
+                                                      'Are you sure you want to exit the workout?',
+                                                  noButtonFunction: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  yesButtonFunction: () {
+                                                    workOutManagerProviderV2
+                                                        .disableTimer();
+                                                    workOutManagerProviderV2
+                                                        .clearIndex();
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        flex: 5,
-                                        child: Container(
+                                        Flexible(
+                                          flex: 5,
+                                          child: Container(
+                                            child: Consumer<
+                                                WorkOutManagerProviderV2>(
+                                              builder: (context,
+                                                      workOutManagerProviderV2,
+                                                      child) =>
+                                                  Text(
+                                                workOutManagerProviderV2
+                                                    .workOutName,
+                                                textAlign: TextAlign.center,
+                                                style: kTitleTextStyle,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: QuestionButton(
+                                            color: Color(0xFFeeeeee),
+                                            elevation: 4.0,
+                                            onPressed: () {
+                                              workOutManagerProviderV2
+                                                  .disableTimer();
+                                              Navigator.pushNamed(context,
+                                                  WorkOutDescriptionScreen.id);
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Flexible(
+                                      child: SizedBox(),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
                                           child: Consumer<
                                               WorkOutManagerProviderV2>(
                                             builder: (context,
                                                     workOutManagerProviderV2,
                                                     child) =>
                                                 Text(
-                                              workOutManagerProviderV2
-                                                  .workOutName,
-                                              textAlign: TextAlign.center,
-                                              style: kTitleTextStyle,
+                                              workOutManagerProviderV2.useTimer
+                                                  ? workOutManagerProviderV2
+                                                      .currentTime
+                                                      .toString()
+                                                  : '${workOutManagerProviderV2.repNumber.toString()} reps',
+                                              style: kTimerTextStyle,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: FlatButton(
-                                          child: Icon(Icons.clear),
-                                          onPressed: () {
-                                            workOutManagerProviderV2
-                                                .disableTimer();
-                                            workOutManagerProviderV2
-                                                .clearIndex();
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Flexible(
-                                    child: SizedBox(),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        child:
-                                            Consumer<WorkOutManagerProviderV2>(
-                                          builder: (context,
-                                                  workOutManagerProviderV2,
-                                                  child) =>
-                                              Text(
-                                            workOutManagerProviderV2.useTimer
-                                                ? workOutManagerProviderV2
-                                                    .currentTime
-                                                    .toString()
-                                                : '${workOutManagerProviderV2.repNumber.toString()} reps',
-                                            style: kTimerTextStyle,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Flexible(
-                                    child: SizedBox(),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      ReusableButton(
-                                        padding: 8.0,
-                                        borderRadius: 12.0,
-                                        text: 'Finish',
-                                        textStyle: kDefaultTextStyle,
+                                      ],
+                                    ),
+                                    Flexible(
+                                      child: SizedBox(),
+                                    ),
+                                    Flexible(
+                                      flex: 1,
+                                      child: SkipButton(
                                         elevation: 8.0,
+                                        borderRadius: 8,
+                                        color: Color(0xFF2196F3), //light blue
+                                        iconData: Icons.arrow_forward,
                                         onPressed: () {
                                           workOutManagerProviderV2.useTimer
                                               ? workOutManagerProviderV2
@@ -205,9 +234,12 @@ class WorkOutManagerScreen extends StatelessWidget {
                                                   .finishExercise();
                                         },
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                    Flexible(
+                                      child: SizedBox(),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

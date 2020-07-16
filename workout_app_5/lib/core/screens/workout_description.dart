@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/workout_manager_provider_v2.dart';
+import 'package:workout_app_5/widgets/buttons/back_button.dart';
 
 class WorkOutDescriptionScreen extends StatelessWidget {
   static const String id = 'workout_description_screen';
@@ -19,39 +20,38 @@ class WorkOutDescriptionScreen extends StatelessWidget {
       child: SafeArea(
         child: Scaffold(
           body: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: FlatButton(
-                    child: Icon(
-                      Icons.clear,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment(-1.1, 0.6),
+                    child: StatelessBackButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        workOutManagerProviderV2.restartTimer();
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      workOutManagerProviderV2.restartTimer();
-                    },
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Text(
-                    workOutManagerProviderV2.workOutDescription,
-                    style: kTitleTextStyle,
-                    textAlign: TextAlign.center,
+                  Flexible(
+                    flex: 1,
+                    child: Text(
+                      workOutManagerProviderV2.workOutDescription,
+                      style: kTitleTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(),
-                ),
-              ],
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

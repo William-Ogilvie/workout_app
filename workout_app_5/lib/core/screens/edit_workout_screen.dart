@@ -5,6 +5,7 @@ import 'package:workout_app_5/core/components/provider/editing/edit_components_p
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_course_selection.dart';
+import 'package:workout_app_5/widgets/buttons/stateless_basic_button.dart';
 import 'package:workout_app_5/widgets/reusable_button.dart';
 
 class EditWorkOutScreen extends StatelessWidget {
@@ -29,7 +30,7 @@ class EditWorkOutScreen extends StatelessWidget {
             Row(
               children: <Widget>[
                 Flexible(
-                  child: ReusableButton(
+                  child: StatelessBasicButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,
@@ -44,7 +45,7 @@ class EditWorkOutScreen extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                  child: ReusableButton(
+                  child: StatelessBasicButton(
                     borderRadius: 30.0,
                     elevation: 8.0,
                     padding: 8.0,

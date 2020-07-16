@@ -6,6 +6,8 @@ import 'package:workout_app_5/core/components/provider/selecting/workout_selecti
 import 'package:workout_app_5/core/screens/create_workout_selection.dart';
 import 'package:workout_app_5/core/screens/edit_workout_screen.dart';
 import 'package:workout_app_5/core/screens/workout_selection.dart';
+import 'package:workout_app_5/widgets/buttons/back_button.dart';
+import 'package:workout_app_5/widgets/buttons/stateless_basic_button.dart';
 import 'package:workout_app_5/widgets/reusable_button.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
@@ -56,10 +58,10 @@ class WelcomeScreen extends StatelessWidget {
               ),
               Flexible(
                 flex: 6,
-                child: ReusableButton(
+                child: StatelessBasicButton(
+                  padding: 0.0,
                   borderRadius: 30.0,
                   elevation: 8.0,
-                  padding: 0.0,
                   width: 300.0,
                   height: 250.0,
                   text: 'Select Workout',
@@ -80,10 +82,10 @@ class WelcomeScreen extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     flex: 6,
-                    child: ReusableButton(
+                    child: StatelessBasicButton(
+                      padding: 12.0,
                       borderRadius: 30.0,
                       elevation: 8.0,
-                      padding: 8.0,
                       width: 200.0,
                       height: 150.0,
                       text: 'Create Workout',
@@ -95,18 +97,18 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   Flexible(
                     flex: 6,
-                    child: ReusableButton(
-                      borderRadius: 30.0,
-                      elevation: 8.0,
-                      padding: 8.0,
-                      width: 200.0,
-                      height: 150.0,
-                      text: 'Edit \nWorkout',
-                      textStyle: kDefaultTextStyle,
-                      onPressed: () {
-                        Navigator.pushNamed(context, EditWorkOutScreen.id);
-                      },
-                    ),
+                    child: StatelessBasicButton(
+                      padding: 12.0,
+                        borderRadius: 30.0,
+                        elevation: 8.0,
+                        width: 200.0,
+                        height: 150.0,
+                        text: 'Edit \nWorkout',
+                        textStyle: kDefaultTextStyle,
+                        onPressed: () {
+                          Navigator.pushNamed(context, EditWorkOutScreen.id);
+                        },
+                      ),
                   ),
                 ],
               ),
