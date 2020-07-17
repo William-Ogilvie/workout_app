@@ -49,6 +49,7 @@ class WorkOutSelectionProvider extends ChangeNotifier {
       StatelessEditingSelectionCourseCard tempCard = StatelessEditingSelectionCourseCard(
         courseName: _mapList[_index].values.elementAt(0),
         databaseId: _mapList[_index].values.elementAt(1),
+        courseRestTimes: _mapList[_index].values.elementAt(2),
       );
 
       statelessEditingSelectionCourseCard.add(tempCard);

@@ -14,6 +14,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   int _repNumber;
   int _currentTime;
   int _currentCourseIndex = 0;
+  int _restTime = 0;
   
   String _workOutName = '';
   String _workOutDescription;
@@ -85,10 +86,11 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     textToSpeechProvider.initFlutterTTS();
     await soundPlayer.loadSound();
     var temp = await DatabaseManager.instance.querryWorkOutCourse(id);
-    _currentCourseNumber = temp.values.first.toString();
+    _currentCourseNumber = temp.values.elementAt(0).toString();
     _currentCourseNumberList = _currentCourseNumber.split('#');
-    _currentCourseTimes = temp.values.last.toString();
+    _currentCourseTimes = temp.values.elementAt(2).toString();
     _currentCourseTimesList = _currentCourseTimes.split('#');
+    _restTime = int.parse(temp.values.elementAt(1));
     print(_currentCourseNumberList);
     print(_currentCourseTimesList);
   }
@@ -158,7 +160,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     workOutScreenState = WorkOutScreenState.rest;
     resetTimer();
     incrementIndex();
-    playTimer(20);
+    playTimer(_restTime);
   }
 
   void finishRestScreen() {

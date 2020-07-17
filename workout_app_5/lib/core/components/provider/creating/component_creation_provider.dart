@@ -47,7 +47,7 @@ class ComponentCreationProvider extends ChangeNotifier {
     print(_workOutName);
     print(_workOutDescription);
     print(timeOrReps);
-    await DatabaseManager.instance.insertComponent(_workOutName, _workOutDescription, timeOrReps);
+    await DatabaseManager.instance.insertComponent(name: _workOutName, desc: _workOutDescription, type: timeOrReps);
     print('Items added');
     _workOutName = '';
     _workOutDescription = '';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
@@ -24,7 +25,8 @@ class CreateCourseSecondScreen extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (context) => YesNoAlertDialog(
-            titleText: 'Are you sure you want to leave? Any unsaved changes will not be saved',
+            titleText:
+                'Are you sure you want to leave? Any unsaved changes will not be saved',
             yesButtonFunction: () {
               Navigator.pop(context, true);
             },
@@ -57,6 +59,30 @@ class CreateCourseSecondScreen extends StatelessWidget {
                         InputDecoration(labelText: 'Enter a workout name'),
                     onSaved: (String val) {
                       courseCreationProvider.workOutName = val;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: TextFormField(
+                    autofocus: false,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'A rest time is required';
+                      }
+                      return null;
+                    },
+                    initialValue: courseCreationProvider.editMode
+                        ? courseCreationProvider.courseRestTimes
+                        : '',
+                    decoration:
+                        InputDecoration(labelText: 'Enter a rest time'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly,
+                    ],
+                    onSaved: (String val) {
+                      courseCreationProvider.workOutRestTime = val;
                     },
                   ),
                 ),

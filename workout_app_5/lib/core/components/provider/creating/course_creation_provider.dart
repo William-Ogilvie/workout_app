@@ -9,6 +9,7 @@ class CourseCreationProvider extends ChangeNotifier {
   int _index = 0;
 
   String workOutName = '';
+  String workOutRestTime = '';
 
   ScrollController scrollController;
 
@@ -74,6 +75,15 @@ class CourseCreationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _courseRestTimes;
+
+  String get courseRestTimes => _courseRestTimes;
+
+  set courseRestTimes(String val) {
+    _courseRestTimes = val;
+    notifyListeners();
+  }
+
   List<String> _courseNumberStringList;
   List<String> _courseNumberTimesList;
 
@@ -108,12 +118,13 @@ class CourseCreationProvider extends ChangeNotifier {
     }
   }
 
-  void launchEditMode(int id, String courseName) async {
+  void launchEditMode({int id, String courseName, String courseRestTimes2}) async {
     statelessCreationCardList = [];
     statelessCreatedCardList = [];
     editMode = true;
     _databaseCourseId = id; 
     courseNameString = courseName;
+    courseRestTimes = courseRestTimes2;
 
     var temp = await DatabaseManager.instance.querryWorkOutCourse(id);
     _courseNumberString = temp.values.first.toString();
@@ -286,8 +297,7 @@ class CourseCreationProvider extends ChangeNotifier {
     print(tempSQLReps);
     print(workOutName);
 
-    DatabaseManager.instance
-        .insertCourse(workOutName, tempSQLNumber, tempSQLReps);
+    DatabaseManager.instance.insertCourse(courseName: workOutName, courseNumber: tempSQLNumber, courseTimes: tempSQLReps, courseRestTime: workOutRestTime); //add this in
   }
 
   bool checkTimesNull() {
@@ -325,8 +335,7 @@ class CourseCreationProvider extends ChangeNotifier {
     print(tempSQLReps);
     print(workOutName);
 
-    DatabaseManager.instance
-        .updateCourse(workOutName, tempSQLNumber, tempSQLReps, _databaseCourseId);
+    DatabaseManager.instance.updateCourse(courseName: workOutName, courseNumber: tempSQLNumber, courseTimes: tempSQLReps, id: _databaseCourseId, courseRestTime: workOutRestTime);
   }
 
   void deleteCourse() {

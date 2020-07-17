@@ -8,8 +8,9 @@ import 'package:workout_app_5/core/screens/workout_creation/create_course_second
 class StatelessEditingSelectionCourseCard extends StatelessWidget {
   final String courseName;
   final int databaseId;
+  final String courseRestTimes;
 
-  StatelessEditingSelectionCourseCard({this.courseName,this.databaseId,Key key}) : super(key: key);
+  StatelessEditingSelectionCourseCard({this.courseName,this.databaseId,this.courseRestTimes, Key key}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class StatelessEditingSelectionCourseCard extends StatelessWidget {
           enabled: true,
           selected: false,
           onTap: () {
-            courseCreationProvider.launchEditMode(databaseId, courseName);
+            courseCreationProvider.launchEditMode(id: databaseId, courseName: courseName, courseRestTimes2: courseRestTimes);
             Navigator.pushNamed(context, CreateCourseSecondScreen.id);
           },
         ),      

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/creating/component_creation_provider.dart';
-import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/enums/already_saved.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 

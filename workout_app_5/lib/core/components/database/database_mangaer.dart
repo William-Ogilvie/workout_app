@@ -12,6 +12,7 @@ class DatabaseManager {
   static final columnName = 'name';
   static final columnDescription = 'description';
   static final columnType = 'type';
+  static final columnRestTime = 'restTime';
 
   static final _tableWorkOutCourses = 'workOutCourses';
   static final columnCourseNumber = 'course_number';
@@ -46,7 +47,8 @@ class DatabaseManager {
       $columnId INTEGER PRIMARY KEY,
       $columnName TEXT NOT NULL,
       $columnCourseNumber TEXT NOT NULL,
-      $columnCourseTimes TEXT NOT NULL
+      $columnCourseTimes TEXT NOT NULL,
+      $columnRestTime TEXT NOT NULL
       )
       ''');
     db.execute('''
@@ -62,26 +64,23 @@ class DatabaseManager {
       $_openingSQLInsertion
       ''');
     return db.execute('''
-      INSERT INTO $_tableWorkOutCourses ($columnName, $columnCourseNumber, $columnCourseTimes) VALUES
-      ("Personal Workout", "16#11#13#14#8#10#2#5#18#6#9#3#7#4#15#1#17#12", "60#100#60#100#60#180#60#100#60#30#60#20#60#20#60#30#60#20")
+      INSERT INTO $_tableWorkOutCourses ($columnName, $columnCourseNumber, $columnCourseTimes, $columnRestTime) VALUES
+      ("Personal Workout", "16#11#13#14#8#10#2#5#18#6#9#3#7#4#15#1#17#12", "60#100#60#100#60#180#60#100#60#30#60#20#60#20#60#30#60#20", "20")
       ''');
   }
 
   Future<Map> querryWorkOutCourse(int id) async {
     Database db = await instance.database;
+
     List<Map> maps = await db.query(
       _tableWorkOutCourses,
-      columns: [columnCourseNumber, columnCourseTimes],
+      columns: [columnCourseNumber, columnRestTime, columnCourseTimes],
       where: '$columnId = ?',
       whereArgs: [id],
     );
     if (maps.length > 0) {
       var temp = maps.first;
-      var temp2 = maps.last;
-      var temp3 = {};
-      temp3.addAll(temp);
-      temp3.addAll(temp2);
-      return temp3;
+      return temp;
     }
     return null;
   }
@@ -109,7 +108,7 @@ class DatabaseManager {
   Future<List<Map<String, dynamic>>> querryAllCourses() async {
     Database db = await instance.database;
     return await db
-        .query(_tableWorkOutCourses, columns: [columnName, columnId]);
+        .query(_tableWorkOutCourses, columns: [columnName, columnId, columnRestTime]);
   }
 
   Future<List<Map<String, dynamic>>> querryAll() async {
@@ -122,7 +121,7 @@ class DatabaseManager {
     return await deleteDatabase(_path);
   }
 
-  Future insertComponent(String name, String desc, String type) async {
+  Future insertComponent({String name, String desc, String type}) async {
     Database db = await instance.database;
     return await db.execute('''
       INSERT INTO $_tableWorkOutComponents ($columnName, $columnDescription, $columnType) VALUES
@@ -130,27 +129,27 @@ class DatabaseManager {
       ''');
   }
 
-  Future insertCourse(
-      String courseName, String courseNumber, String courseTimes) async {
+  Future insertCourse({
+      String courseName, String courseNumber, String courseTimes, String courseRestTime}) async {
     Database db = await instance.database;
     return await db.execute('''
-      INSERT INTO $_tableWorkOutCourses ($columnName,  $columnCourseNumber, $columnCourseTimes) VALUES
-      ("$courseName","$courseNumber","${courseTimes.trim()}")
+      INSERT INTO $_tableWorkOutCourses ($columnName,  $columnCourseNumber, $columnCourseTimes, $columnRestTime) VALUES
+      ("$courseName","$courseNumber","${courseTimes.trim()}", "$courseRestTime")
       ''');
   }
 
-  Future updateCourse(String courseName, String courseNumber,
-      String courseTimes, int id) async {
+  Future updateCourse({String courseName, String courseNumber,
+      String courseTimes, String courseRestTime, int id}) async {
     Database db = await instance.database;
     return await db.execute('''
       UPDATE $_tableWorkOutCourses
-      SET $columnName = "$courseName",$columnCourseNumber = "$courseNumber", $columnCourseTimes = "${courseTimes.trim()}"
+      SET $columnName = "$courseName",$columnCourseNumber = "$courseNumber", $columnCourseTimes = "${courseTimes.trim()}", $columnRestTime = "$courseRestTime"
       WHERE $columnId = $id;
       ''');
   }
 
-  Future updateComponent(String componentName, String componentDescription,
-      String type, int id) async {
+  Future updateComponent({String componentName, String componentDescription,
+      String type, int id}) async {
     Database db = await instance.database;
     return await db.execute('''
       UPDATE $_tableWorkOutComponents 
@@ -159,16 +158,16 @@ class DatabaseManager {
       ''');
   }
 
-  Future deleteComponent(int id) async {
+  Future deleteComponent({int id}) async {
     Database db = await instance.database;
-    await deleteInstancesOfComponent(id);
+    await deleteInstancesOfComponent(id: id);
     return await db.execute('''
       DELETE FROM $_tableWorkOutComponents
       WHERE $columnId = $id;
       ''');
   }
 
-  Future deleteInstancesOfComponent(int id) async {
+  Future deleteInstancesOfComponent({int id}) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> _tempMapList;
     String _currentCourseNumber;
@@ -178,7 +177,7 @@ class DatabaseManager {
     bool rebuild = false;
 
     _tempMapList = await db.query(_tableWorkOutCourses,
-        columns: [columnCourseNumber, columnName, columnId, columnCourseTimes]);
+        columns: [columnCourseNumber, columnName, columnId, columnRestTime, columnCourseTimes]);
 
     for (int index1 = 0; index1 < _tempMapList.length; index1++) {
       _currentCourseNumber = _tempMapList[index1].values.first;
@@ -206,6 +205,7 @@ class DatabaseManager {
         String tempSQLReps = '';
         String workOutName = _tempMapList[index1].values.elementAt(1);
         int id = _tempMapList[index1].values.elementAt(2);
+        String restTime = _tempMapList[index1].values.elementAt(3);
 
 
         for (int _index = 0;
@@ -232,9 +232,7 @@ class DatabaseManager {
         print(tempSQLNumber);
         print(tempSQLReps);
 
-        DatabaseManager.instance
-            .updateCourse(workOutName, tempSQLNumber, tempSQLReps, id);
-
+        DatabaseManager.instance.updateCourse(courseName: workOutName, courseNumber: tempSQLNumber, courseTimes: tempSQLReps, courseRestTime: restTime, id: id);
       }
     }
     print('Final times are $_currentTimesList');

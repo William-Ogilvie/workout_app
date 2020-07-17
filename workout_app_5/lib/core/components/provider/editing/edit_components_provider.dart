@@ -85,7 +85,7 @@ class EditComponentsProvider extends ChangeNotifier {
     print(_workOutDescription);
     print(timeOrReps);
     //await DatabaseManager.instance.insertComponent(_workOutName, _workOutDescription, timeOrReps);
-    await DatabaseManager.instance.updateComponent(_workOutName, _workOutDescription, timeOrReps, statelessEditingComponetCardList[indexInUse].databaseId);
+    await DatabaseManager.instance.updateComponent(componentName: _workOutName, componentDescription: _workOutDescription, type: timeOrReps, id: statelessEditingComponetCardList[indexInUse].databaseId);
     print('Items added');
     alreadySaved = SavedState.saved;
     _workOutName = '';
@@ -93,7 +93,7 @@ class EditComponentsProvider extends ChangeNotifier {
   }
 
   void deleteComponent() async {
-    await DatabaseManager.instance.deleteComponent(statelessEditingComponetCardList[indexInUse].databaseId);
+    await DatabaseManager.instance.deleteComponent(id: statelessEditingComponetCardList[indexInUse].databaseId);
   }
 
   void rebuildList() {
