@@ -18,56 +18,54 @@ class EditWorkOutScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: SizedBox(
-                height: 100.0,
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: StatelessBasicButton(
-                    borderRadius: 30.0,
-                    elevation: 8.0,
-                    padding: 8.0,
-                    width: 250.0,
-                    height: 200.0,
-                    text: 'Edit Workout Componenets',
-                    textStyle: kDefaultTextStyle,
-                    onPressed: () async{
-                      await _editComponentsProvider.launch();
-                      Navigator.pushNamed(context, EditComponentsSelectionScreen.id);
-                    },
-                  ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 100.0,
                 ),
-                Flexible(
-                  child: StatelessBasicButton(
-                    borderRadius: 30.0,
-                    elevation: 8.0,
-                    padding: 8.0,
-                    width: 250.0,
-                    height: 200.0,
-                    text: 'Edit Workout Course',
-                    textStyle: kDefaultTextStyle,
-                    onPressed: () async{
-                      await _workOutSelectionProvider.launchEditMode();
-                      Navigator.pushNamed(context, EditCourseSelectionScreen.id);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Flexible(
-              flex: 1,
-              child: SizedBox(
-                height: 100.0,
               ),
-            ),
-          ],
+              Flexible(
+                child: StatelessBasicButton(
+                  borderRadius: 30.0,
+                  elevation: 8.0,
+                  padding: 8.0,
+                  width: 250.0,
+                  height: 200.0,
+                  text: 'Edit Workout Componenets',
+                  textStyle: kDefaultTextStyle,
+                  onPressed: () async{
+                    await _editComponentsProvider.launch();
+                    Navigator.pushNamed(context, EditComponentsSelectionScreen.id);
+                  },
+                ),
+              ),
+              Flexible(
+                child: StatelessBasicButton(
+                  borderRadius: 30.0,
+                  elevation: 8.0,
+                  padding: 8.0,
+                  width: 250.0,
+                  height: 200.0,
+                  text: 'Edit Workout Course',
+                  textStyle: kDefaultTextStyle,
+                  onPressed: () async{
+                    await _workOutSelectionProvider.launchEditMode();
+                    Navigator.pushNamed(context, EditCourseSelectionScreen.id);
+                  },
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 100.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

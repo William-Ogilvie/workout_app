@@ -248,3 +248,4 @@ class WorkOutManagerScreen extends StatelessWidget {
     );
   }
 }
+

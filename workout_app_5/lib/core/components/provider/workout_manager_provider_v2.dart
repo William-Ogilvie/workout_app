@@ -15,7 +15,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   int _currentTime;
   int _currentCourseIndex = 0;
   int _restTime = 0;
-  
+
   String _workOutName = '';
   String _workOutDescription;
   String _currentCourseNumber;
@@ -30,6 +30,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   bool _cancelTimer = false;
   bool _workOutEnded = false;
   bool _pauseTimer = false;
+  bool _stopTimerNoMatterWhat = false;
 
   WorkOutScreenState _workOutScreenState = WorkOutScreenState.exercise;
 
@@ -82,7 +83,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setWorkOutCourse(int id) async{
+  void setWorkOutCourse(int id) async {
     textToSpeechProvider.initFlutterTTS();
     await soundPlayer.loadSound();
     var temp = await DatabaseManager.instance.querryWorkOutCourse(id);
@@ -95,23 +96,24 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     print(_currentCourseTimesList);
   }
 
-  void activateWorkOut() async{
+  void activateWorkOut() async {
     workOutEnded = false;
     useTimer = false;
+    _stopTimerNoMatterWhat = false;
     _workOutScreenState = WorkOutScreenState.exercise;
     _sayRepsOrSeconds = 'Reps';
 
     var tempId;
     try {
       tempId = int.parse(_currentCourseNumberList[_currentCourseIndex].trim());
-    } catch (e){
+    } catch (e) {
       workOutEnded = true;
       return null;
     }
-    
+
     var map = await DatabaseManager.instance.querryWorkOutComponent(tempId);
     var tempList = map.values.toList();
-    
+
     workOutName = tempList[0].toString().trim();
     workOutDescription = tempList[1].toString().trim();
     _repsOrSeconds = tempList[2].toString().trim();
@@ -123,28 +125,40 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     print(_repsOrSeconds);
     print(repNumber);
 
-
-
-    
-    if(_repsOrSeconds == 'Time') {
+    if (_repsOrSeconds == 'Time') {
       useTimer = true;
       _sayRepsOrSeconds = 'seconds';
       playTimer(repNumber);
     }
 
-    textToSpeechProvider.speak('{$workOutName} for {$repNumber} {$_sayRepsOrSeconds}');
+    textToSpeechProvider
+        .speak('{$workOutName} for {$repNumber} {$_sayRepsOrSeconds}');
+  }
 
+  void checkWorkOutEnded() {
+    var tempId;
+    try {
+      tempId = int.parse(_currentCourseNumberList[_currentCourseIndex].trim());
+    } catch (e) {
+      workOutEnded = true;
+      _stopTimerNoMatterWhat = true;
+      return null;
+    }
   }
 
   playTimer(int timeDuration) {
     _currentTime = timeDuration;
     Timer.periodic(Duration(seconds: 1), (Timer t) {
-      if (_currentTime < 1 || _cancelTimer == true) {
+      if (_stopTimerNoMatterWhat == true) {
+        t.cancel();
+      } else if (_currentTime < 1 || _cancelTimer == true) {
         t.cancel();
         soundPlayer.resetSoundPlayerState();
         print('Timer Cancelled');
         if (_pauseTimer != true) {
-          workOutScreenState == WorkOutScreenState.exercise ? finishExercise() : finishRestScreen();
+          workOutScreenState == WorkOutScreenState.exercise
+              ? finishExercise()
+              : finishRestScreen();
         }
       } else if (_currentTime < 4 &&
           soundPlayer.soundPlayerState == SoundPlayerState.idle) {
@@ -161,6 +175,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     resetTimer();
     incrementIndex();
     playTimer(_restTime);
+    checkWorkOutEnded();
   }
 
   void finishRestScreen() {
@@ -207,5 +222,4 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     _workOutEnded = false;
     _pauseTimer = false;
   }
-  
 }

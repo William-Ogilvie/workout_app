@@ -5,6 +5,7 @@ import 'package:workout_app_5/core/components/provider/editing/edit_components_p
 import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
 import 'package:workout_app_5/enums/already_saved.dart';
 import 'package:workout_app_5/widgets/buttons/no_button.dart';
+import 'package:workout_app_5/widgets/show_dialog/ok_alert_dialog.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
 class EditComponentsScreen extends StatelessWidget {
@@ -44,6 +45,7 @@ class EditComponentsScreen extends StatelessWidget {
                       ),
                     );
                   }
+                  await editComponentsProvider.launch();
                   return true;
                 },
                 key: _formKey,
@@ -153,6 +155,18 @@ class EditComponentsScreen extends StatelessWidget {
                                   _formKey.currentState.save();
                                   editComponentsProvider.saveWorkOutComponent();
                                   Navigator.pop(context, true);
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return OkAlertDialog(
+                                        titleText: 'Workout component saved',
+                                        okButtonFunction: () {
+                                          Navigator.pop(context, true);
+                                        },
+                                      );
+                                    },
+                                  );
                                 },
                               );
                             },
@@ -183,7 +197,19 @@ class EditComponentsScreen extends StatelessWidget {
                                       .deleteComponent();
                                   await editComponentsProvider.launch();
                                   Navigator.pop(context);
-                                  Navigator.pop(context);
+
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return OkAlertDialog(
+                                          titleText:
+                                              'Workout component deleted',
+                                          okButtonFunction: () {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      });
                                 },
                               );
                             },

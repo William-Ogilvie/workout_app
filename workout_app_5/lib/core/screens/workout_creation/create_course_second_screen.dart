@@ -27,7 +27,10 @@ class CreateCourseSecondScreen extends StatelessWidget {
           builder: (context) => YesNoAlertDialog(
             titleText:
                 'Are you sure you want to leave? Any unsaved changes will not be saved',
-            yesButtonFunction: () {
+            yesButtonFunction: () async {
+              courseCreationProvider.editMode
+                  ? await _workOutSelectionProvider.launchEditMode()
+                  : print('Not edit mode');
               Navigator.pop(context, true);
             },
             noButtonFunction: () {
@@ -42,49 +45,62 @@ class CreateCourseSecondScreen extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: TextFormField(
-                    autofocus: false,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'A name is required';
-                      }
-                      return null;
-                    },
-                    initialValue: courseCreationProvider.editMode
-                        ? courseCreationProvider.courseNameString
-                        : '',
-                    decoration:
-                        InputDecoration(labelText: 'Enter a workout name'),
-                    onSaved: (String val) {
-                      courseCreationProvider.workOutName = val;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: TextFormField(
-                    autofocus: false,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'A rest time is required';
-                      }
-                      return null;
-                    },
-                    initialValue: courseCreationProvider.editMode
-                        ? courseCreationProvider.courseRestTimes
-                        : '',
-                    decoration:
-                        InputDecoration(labelText: 'Enter a rest time'),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly,
-                    ],
-                    onSaved: (String val) {
-                      courseCreationProvider.workOutRestTime = val;
-                    },
-                  ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TextFormField(
+                            autofocus: false,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'A name is required';
+                              }
+                              return null;
+                            },
+                            initialValue: courseCreationProvider.editMode
+                                ? courseCreationProvider.courseNameString
+                                : '',
+                            decoration: InputDecoration(
+                                labelText: 'Enter a workout name'),
+                            onSaved: (String val) {
+                              courseCreationProvider.workOutName = val;
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TextFormField(
+                            autofocus: false,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'A rest time is required';
+                              }
+                              return null;
+                            },
+                            initialValue: courseCreationProvider.editMode
+                                ? courseCreationProvider.courseRestTimes
+                                : '',
+                            decoration: InputDecoration(labelText: 'Rest Time'),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              WhitelistingTextInputFormatter.digitsOnly,
+                            ],
+                            onSaved: (String val) {
+                              courseCreationProvider.workOutRestTime = val;
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   flex: 5,
@@ -99,7 +115,7 @@ class CreateCourseSecondScreen extends StatelessWidget {
                     Flexible(
                       child: RaisedButton(
                         color: Colors.grey[300],
-                        child: Text('Get more components'),
+                        child: Text('Get Components'),
                         onPressed: () async {
                           courseCreationProvider.editMode
                               ? await courseCreationProvider.launch(true)
@@ -166,6 +182,20 @@ class CreateCourseSecondScreen extends StatelessWidget {
                                     : courseCreationProvider
                                         .submitWorkOutCourse();
                                 Navigator.pop(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return OkAlertDialog(
+                                      titleText: courseCreationProvider.editMode
+                                          ? 'Workout course saved'
+                                          : 'Workout course submitted',
+                                      okButtonFunction: () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  },
+                                );
                               },
                             ),
                           );
@@ -183,7 +213,7 @@ class CreateCourseSecondScreen extends StatelessWidget {
                                   builder: (BuildContext context) {
                                     return YesNoAlertDialog(
                                       titleText:
-                                          'Are you sure you want to delete this component?',
+                                          'Are you sure you want to delete this course?',
                                       noButtonFunction: () {
                                         Navigator.pop(context);
                                       },
@@ -193,7 +223,20 @@ class CreateCourseSecondScreen extends StatelessWidget {
                                         await _workOutSelectionProvider
                                             .launchEditMode();
                                         Navigator.pop(context);
-                                        Navigator.pop(context);
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return OkAlertDialog(
+                                              titleText:
+                                                  'Workout course deleted',
+                                              okButtonFunction: () {
+                                                Navigator.pop(context);
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          },
+                                        );
                                       },
                                     );
                                   },

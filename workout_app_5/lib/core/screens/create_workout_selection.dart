@@ -19,56 +19,54 @@ class CreateWorkOutSelection extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: SizedBox(
-                height: 100.0,
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: StatelessBasicButton(
-                    borderRadius: 30.0,
-                    elevation: 8.0,
-                    padding: 8.0,
-                    width: 250.0,
-                    height: 200.0,
-                    text: 'Create Workout Componenets',
-                    textStyle: kDefaultTextStyle,
-                    onPressed: () {
-                      _componentCreationProvider.alreadySaved = SavedState.noChange;
-                      Navigator.pushNamed(context, CreateComponenetsScreen.id);
-                    },
-                  ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 100.0,
                 ),
-                Flexible(
-                  child: StatelessBasicButton(
-                    borderRadius: 30.0,
-                    elevation: 8.0,
-                    padding: 8.0,
-                    width: 250.0,
-                    height: 200.0,
-                    text: 'Create Workout Course',
-                    textStyle: kDefaultTextStyle,
-                    onPressed: () async{
-                      await _courseCreationProvider.launch(false);
-                      Navigator.pushNamed(context, CreateCourseScreen.id);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Flexible(
-              flex: 1,
-              child: SizedBox(
-                height: 100.0,
               ),
-            ),
-          ],
+              Flexible(
+                child: StatelessBasicButton(
+                  borderRadius: 30.0,
+                  elevation: 8.0,
+                  padding: 8.0,
+                  width: 250.0,
+                  height: 200.0,
+                  text: 'Create Workout Componenets',
+                  textStyle: kDefaultTextStyle,
+                  onPressed: () {
+                    _componentCreationProvider.alreadySaved = SavedState.noChange;
+                    Navigator.pushNamed(context, CreateComponenetsScreen.id);
+                  },
+                ),
+              ),
+              Flexible(
+                child: StatelessBasicButton(
+                  borderRadius: 30.0,
+                  elevation: 8.0,
+                  padding: 8.0,
+                  width: 250.0,
+                  height: 200.0,
+                  text: 'Create Workout Course',
+                  textStyle: kDefaultTextStyle,
+                  onPressed: () async{
+                    await _courseCreationProvider.launch(false);
+                    Navigator.pushNamed(context, CreateCourseScreen.id);
+                  },
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 100.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
