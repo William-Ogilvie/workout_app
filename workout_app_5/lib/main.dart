@@ -15,6 +15,8 @@ void main() {
 }
 
 class WorkOut extends StatelessWidget {
+  final String _font = 'Roboto';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -41,6 +43,58 @@ class WorkOut extends StatelessWidget {
       child: MaterialApp(
         initialRoute: WelcomeScreen.id,
         onGenerateRoute: RouteGenerator.generateRoute,
+        theme: ThemeData.light().copyWith(
+          textTheme: TextTheme(
+            bodyText1: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            bodyText2: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            caption: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            headline1: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            headline2: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            headline3: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            headline4: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            headline5: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            headline6: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            subtitle1: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            subtitle2: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+            overline: TextStyle(
+              color: Colors.black,
+              fontFamily: _font,
+            ),
+          ),
+        ),
       ),
     );
   }

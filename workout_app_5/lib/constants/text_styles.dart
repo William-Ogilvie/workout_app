@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+const cairo = 'Cairo';
+const roboto = 'Roboto';
+
 const kDefaultTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 24.0,
+  fontFamily: roboto,
 );
 
 const kTitleTextStyle =  TextStyle(
