@@ -9,7 +9,7 @@ const kDefaultTextStyle = TextStyle(
   fontFamily: roboto,
 );
 
-const kTitleTextStyle =  TextStyle(
+const kTitleTextStyle = TextStyle(
   fontSize: 26.0,
   fontWeight: FontWeight.bold,
 );
@@ -19,6 +19,6 @@ const kSmallerTextStyle = TextStyle(
 );
 
 const kTimerTextStyle = TextStyle(
-                    fontSize: 50.0,
-                    fontWeight: FontWeight.bold,
+  fontSize: 50.0,
+  fontWeight: FontWeight.bold,
 );
