@@ -72,7 +72,7 @@ flutter:
     - family: Cairo
       fonts:
         - asset: fonts/Cairo-Regular.ttf
-        - asset: font/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Regular.ttf
     #     - asset: fonts/Schyler-Italic.ttf
     #       style: italic
     # - family: Trajan Pro
