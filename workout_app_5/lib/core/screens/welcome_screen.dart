@@ -41,15 +41,15 @@ class WelcomeScreen extends StatelessWidget {
               SizedBox(
                 height: 50.0,
               ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Container(
-                  child: Text(
-                    'Welcome to the Workout App',
-                    style: kTitleTextStyle,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.all(20.0),
+              //   child: Container(
+              //     child: Text(
+              //       'Welcome to Custom Workout',
+              //       style: kTitleTextStyle,
+              //     ),
+              //   ),
+              // ),
               Flexible(
                 flex: 2,
                 child: SizedBox(

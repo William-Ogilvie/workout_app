@@ -8,6 +8,8 @@ import 'core/components/provider/creating/course_creation_provider.dart';
 import 'core/components/provider/selecting/workout_selection_provider.dart';
 import 'core/components/route_generator.dart';
 import 'core/screens/welcome_screen.dart';
+import 'package:animated_splash/animated_splash.dart';
+
 
 void main() {
   setupLocator();
@@ -41,7 +43,14 @@ class WorkOut extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        initialRoute: WelcomeScreen.id,
+        debugShowCheckedModeBanner: false,
+        home: AnimatedSplash(
+          imagePath: 'images/playstore.png',
+          home: WelcomeScreen(),
+          duration: 2500,
+          type: AnimatedSplashType.StaticDuration,
+        ),
+        //initialRoute: WelcomeScreen.id,
         onGenerateRoute: RouteGenerator.generateRoute,
         theme: ThemeData.light().copyWith(
           textTheme: TextTheme(
