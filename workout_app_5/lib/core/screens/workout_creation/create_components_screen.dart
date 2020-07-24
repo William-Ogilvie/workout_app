@@ -68,6 +68,7 @@ class CreateComponenetsScreen extends StatelessWidget {
                 ),
                 Flexible(
                   child: TextFormField(
+                    maxLines: null,
                     controller: workOutDescriptionController,
                     decoration:
                         InputDecoration(labelText: 'Workout Description'),

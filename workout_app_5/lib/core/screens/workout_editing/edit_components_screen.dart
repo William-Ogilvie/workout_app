@@ -77,6 +77,7 @@ class EditComponentsScreen extends StatelessWidget {
                     ),
                     Flexible(
                       child: TextFormField(
+                        maxLines: null,
                         initialValue: editComponentsProvider
                             .statelessEditingComponetCardList[
                                 editComponentsProvider.indexInUse]
