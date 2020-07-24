@@ -22,3 +22,8 @@ const kTimerTextStyle = TextStyle(
   fontSize: 50.0,
   fontWeight: FontWeight.bold,
 );
+
+const kWorkOutCourseButtonTextStyle = TextStyle(
+  fontSize: 12.2,
+  fontWeight: FontWeight.bold
+);

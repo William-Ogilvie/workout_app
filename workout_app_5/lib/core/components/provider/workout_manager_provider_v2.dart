@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:workout_app_5/core/components/converters/time_conversion.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
 import 'package:workout_app_5/core/components/provider/sound_player_provider.dart';
 import 'package:workout_app_5/core/components/provider/text_to_speech_provider.dart';
+import 'package:workout_app_5/enums/converting_time_state.dart';
 import 'package:workout_app_5/enums/sound_player_state.dart';
 import 'package:workout_app_5/enums/workout_screen_state.dart';
 
@@ -12,7 +14,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   SoundPlayer soundPlayer = SoundPlayer();
 
   int _repNumber;
-  int _currentTime;
+  int currentTime;
   int _currentCourseIndex = 0;
   int _restTime = 0;
 
@@ -38,13 +40,6 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
 
   set repNumber(int val) {
     _repNumber = val;
-    notifyListeners();
-  }
-
-  int get currentTime => _currentTime;
-
-  set currentTime(int val) {
-    _currentTime = val;
     notifyListeners();
   }
 
@@ -126,13 +121,25 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     print(repNumber);
 
     if (_repsOrSeconds == 'Time') {
+      String tempSecs = _secondsCalcualtion(repNumber).toString();
+
+      if (_repNumber >= 60) {
+        String tempMins = _minutesCalculation(repNumber).toString();
+        textToSpeechProvider.speak(
+            '$workOutName for $tempMins ${tempMins == '1' ? 'minute' : 'minutes'} ${tempSecs == '0' ? '' : 'and $tempSecs seconds'}');
+      } else {
+        textToSpeechProvider.speak('{$workOutName} for {$tempSecs} seconds');
+      }
+
+
       useTimer = true;
       _sayRepsOrSeconds = 'seconds';
       playTimer(repNumber);
-    }
 
-    textToSpeechProvider
-        .speak('{$workOutName} for {$repNumber} {$_sayRepsOrSeconds}');
+
+    } else {
+      textToSpeechProvider.speak('{$workOutName} for {$repNumber} reps');
+    }
   }
 
   void checkWorkOutEnded() {
@@ -146,12 +153,17 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     }
   }
 
+  //playing time
+
   playTimer(int timeDuration) {
-    _currentTime = timeDuration;
+    _minuteRunner = null;
+    _secondsRunner = null;
+    currentTime = timeDuration;
+    convertTime();
     Timer.periodic(Duration(seconds: 1), (Timer t) {
       if (_stopTimerNoMatterWhat == true) {
         t.cancel();
-      } else if (_currentTime < 1 || _cancelTimer == true) {
+      } else if (currentTime < 1 || _cancelTimer == true) {
         t.cancel();
         soundPlayer.resetSoundPlayerState();
         print('Timer Cancelled');
@@ -160,15 +172,79 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
               ? finishExercise()
               : finishRestScreen();
         }
-      } else if (_currentTime < 4 &&
+      } else if (currentTime < 4 &&
           soundPlayer.soundPlayerState == SoundPlayerState.idle) {
         soundPlayer.playSound();
       } else {
         currentTime--;
+        _secondsRunner--;
+        convertTime();
         print(currentTime);
       }
     });
   }
+
+  //converting time
+
+  TimeFormat _displayedCurrentTime;
+
+  TimeFormat get displayedCurrentTime => _displayedCurrentTime;
+
+  // ConvertingTimeState _convertingTimeState;
+  int _secondsRunner;
+  int _minuteRunner;
+
+  set displayedCurrentTime(TimeFormat val) {
+    _displayedCurrentTime = val;
+    notifyListeners();
+  }
+
+  void convertTime() {
+    // if (currentTime % 60 != 0) {
+    //   var minutes = _minutesCalculation();
+    //   var seconds = _secondsCalcualtion();
+
+    //   displayedCurrentTime = TimeFormat(
+    //     minutes: minutes.toString(),
+    //     seconds: seconds.toInt() < 10
+    //         ? '0${seconds.toInt().toString()}'
+    //         : seconds.toInt().toString(),
+    //   );
+    //   displayedCurrentTime.makeDisplayedTime();
+    //   return null;
+    // }
+
+    if (_minuteRunner == null) {
+      print('initailings');
+      _minuteRunner = _minutesCalculation(currentTime);
+    }
+
+    if (_secondsRunner == null) {
+      print('initialising');
+      _secondsRunner = _secondsCalcualtion(currentTime);
+    } else if (_secondsRunner < 0) {
+      print('Re calculating');
+      _secondsRunner = _secondsCalcualtion(currentTime);
+      _minuteRunner = _minutesCalculation(currentTime);
+    }
+
+    displayedCurrentTime = TimeFormat(
+      minutes: _minuteRunner.toString(),
+      seconds: _secondsRunner.toString(),
+    );
+    displayedCurrentTime.makeDisplayedTime();
+  }
+
+  int _minutesCalculation(int time) {
+    return (time / 60).truncate();
+  }
+
+  int _secondsCalcualtion(int time) {
+    var temp = ((time / 60) - (time / 60).truncate()) * 60;
+    return temp.toInt();
+  }
+
+  //misc functions
 
   void finishExercise() {
     workOutScreenState = WorkOutScreenState.rest;
@@ -203,7 +279,7 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   void restartTimer() {
     _cancelTimer = false;
     _pauseTimer = false;
-    _useTimer ? playTimer(_currentTime) : print('Gotta');
+    _useTimer ? playTimer(currentTime) : print('Gotta');
   }
 
   void incrementIndex() {

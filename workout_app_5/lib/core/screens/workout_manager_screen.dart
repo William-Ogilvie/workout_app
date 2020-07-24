@@ -87,8 +87,7 @@ class WorkOutManagerScreen extends StatelessWidget {
                                                 workOutManagerProviderV2,
                                                 child) =>
                                             Text(
-                                          workOutManagerProviderV2.currentTime
-                                              .toString(),
+                                          workOutManagerProviderV2.displayedCurrentTime.displayedTime,
                                           style: kTimerTextStyle.copyWith(
                                               fontSize: 60.0),
                                         ),
@@ -207,8 +206,8 @@ class WorkOutManagerScreen extends StatelessWidget {
                                                 Text(
                                               workOutManagerProviderV2.useTimer
                                                   ? workOutManagerProviderV2
-                                                      .currentTime
-                                                      .toString()
+                                                      .displayedCurrentTime.displayedTime
+                                                      
                                                   : '${workOutManagerProviderV2.repNumber.toString()} reps',
                                               style: kTimerTextStyle,
                                             ),
