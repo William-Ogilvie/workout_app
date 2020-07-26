@@ -67,5 +67,6 @@ class RouteGenerator {
           builder: (context) => EditComponentsScreen(),
         );
     }
+    return null;
   }
 }

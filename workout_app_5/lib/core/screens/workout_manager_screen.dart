@@ -7,7 +7,6 @@ import 'package:workout_app_5/enums/workout_screen_state.dart';
 import 'package:workout_app_5/widgets/buttons/back_button.dart';
 import 'package:workout_app_5/widgets/buttons/question_button.dart';
 import 'package:workout_app_5/widgets/buttons/skip_button.dart';
-import 'package:workout_app_5/widgets/reusable_button.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
 class WorkOutManagerScreen extends StatelessWidget {
@@ -77,7 +76,18 @@ class WorkOutManagerScreen extends StatelessWidget {
                                 children: <Widget>[
                                   Expanded(
                                     flex: 3,
-                                    child: SizedBox(),
+                                    child: Container(
+                                      child: Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: 10.0),
+                                          child: Text(
+                                            'Rest',
+                                            style: kTitleTextStyle,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   Flexible(
                                     flex: 1,
@@ -87,7 +97,9 @@ class WorkOutManagerScreen extends StatelessWidget {
                                                 workOutManagerProviderV2,
                                                 child) =>
                                             Text(
-                                          workOutManagerProviderV2.displayedCurrentTime.displayedTime,
+                                          workOutManagerProviderV2
+                                              .displayedCurrentTime
+                                              .displayedTime,
                                           style: kTimerTextStyle.copyWith(
                                               fontSize: 60.0),
                                         ),
@@ -206,8 +218,8 @@ class WorkOutManagerScreen extends StatelessWidget {
                                                 Text(
                                               workOutManagerProviderV2.useTimer
                                                   ? workOutManagerProviderV2
-                                                      .displayedCurrentTime.displayedTime
-                                                      
+                                                      .displayedCurrentTime
+                                                      .displayedTime
                                                   : '${workOutManagerProviderV2.repNumber.toString()} reps',
                                               style: kTimerTextStyle,
                                             ),
@@ -247,4 +259,3 @@ class WorkOutManagerScreen extends StatelessWidget {
     );
   }
 }
-

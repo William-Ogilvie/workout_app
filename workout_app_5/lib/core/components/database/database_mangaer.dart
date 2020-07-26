@@ -117,7 +117,6 @@ class DatabaseManager {
   }
 
   Future deletedatabase() async {
-    Database db = await instance.database;
     return await deleteDatabase(_path);
   }
 

@@ -8,10 +8,11 @@ class TextToSpeechProvider {
   FlutterTts flutterTts = FlutterTts();
   
   
-  void initFlutterTTS() async {
+  Future initFlutterTTS() async {
     flutterTts.setPitch(_pitch);
     flutterTts.setVolume(_volume);
     flutterTts.setVoice(_voice);
+    print('Loaded');
   }
 
   void speak(String say) async {

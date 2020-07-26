@@ -5,7 +5,6 @@ import 'package:workout_app_5/core/components/converters/time_conversion.dart';
 import 'package:workout_app_5/core/components/database/database_mangaer.dart';
 import 'package:workout_app_5/core/components/provider/sound_player_provider.dart';
 import 'package:workout_app_5/core/components/provider/text_to_speech_provider.dart';
-import 'package:workout_app_5/enums/converting_time_state.dart';
 import 'package:workout_app_5/enums/sound_player_state.dart';
 import 'package:workout_app_5/enums/workout_screen_state.dart';
 
@@ -23,7 +22,6 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   String _currentCourseNumber;
   String _currentCourseTimes;
   String _repsOrSeconds;
-  String _sayRepsOrSeconds;
 
   List<String> _currentCourseNumberList;
   List<String> _currentCourseTimesList;
@@ -78,8 +76,12 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setWorkOutCourse(int id) async {
+  void initialiseTextToSpeech() {
     textToSpeechProvider.initFlutterTTS();
+  }
+
+  void setWorkOutCourse(int id) async {
+    initialiseTextToSpeech();
     await soundPlayer.loadSound();
     var temp = await DatabaseManager.instance.querryWorkOutCourse(id);
     _currentCourseNumber = temp.values.elementAt(0).toString();
@@ -96,7 +98,6 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
     useTimer = false;
     _stopTimerNoMatterWhat = false;
     _workOutScreenState = WorkOutScreenState.exercise;
-    _sayRepsOrSeconds = 'Reps';
 
     var tempId;
     try {
@@ -133,7 +134,6 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
 
 
       useTimer = true;
-      _sayRepsOrSeconds = 'seconds';
       playTimer(repNumber);
 
 
@@ -143,9 +143,8 @@ class WorkOutManagerProviderV2 extends ChangeNotifier {
   }
 
   void checkWorkOutEnded() {
-    var tempId;
     try {
-      tempId = int.parse(_currentCourseNumberList[_currentCourseIndex].trim());
+      int.parse(_currentCourseNumberList[_currentCourseIndex].trim());
     } catch (e) {
       workOutEnded = true;
       _stopTimerNoMatterWhat = true;

@@ -10,7 +10,6 @@ import 'core/components/route_generator.dart';
 import 'core/screens/welcome_screen.dart';
 import 'package:animated_splash/animated_splash.dart';
 
-
 void main() {
   setupLocator();
   runApp(WorkOut());
