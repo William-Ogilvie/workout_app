@@ -11,8 +11,6 @@ import 'core/components/route_generator.dart';
 import 'package:animated_splash/animated_splash.dart';
 
 void main() {
-  final String _font = 'Roboto';
-
   setupLocator();
   runApp(
     MultiProvider(
@@ -64,6 +62,7 @@ class WorkOut extends StatelessWidget {
         },
         outputAndHome: output,
       ),
+      //initialRoute: WorkOutSelectionScreen.id,
       onGenerateRoute: RouteGenerator.generateRoute,
       theme: ThemeData.light().copyWith(
         textTheme: TextTheme(
