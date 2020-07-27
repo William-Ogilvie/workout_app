@@ -4,23 +4,24 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
 import 'package:workout_app_5/core/screens/create_workout_selection.dart';
 import 'package:workout_app_5/core/screens/edit_workout_screen.dart';
-import 'package:workout_app_5/core/screens/welcome_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_components_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_second_screen.dart';
-import 'package:workout_app_5/core/screens/workout_description.dart';
+import 'package:workout_app_5/core/screens/workout_play/workout_description.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_components_screen.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_components_selection.dart';
 import 'package:workout_app_5/core/screens/workout_editing/edit_course_selection.dart';
-import 'package:workout_app_5/core/screens/workout_manager_screen.dart';
-import 'package:workout_app_5/core/screens/workout_selection.dart';
+import 'package:workout_app_5/core/screens/workout_play/workout_manager_screen.dart';
+import 'package:workout_app_5/core/screens/workout_ui/workout_selection.dart';
+import 'package:workout_app_5/core/screens/workout_ui/welcome_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
-
     switch (settings.name) {
       case WelcomeScreen.id:
         return MaterialPageRoute(builder: (context) => WelcomeScreen());

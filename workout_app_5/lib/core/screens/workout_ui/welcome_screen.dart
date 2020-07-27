@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
-import 'package:workout_app_5/core/components/database/database_mangaer.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
 import 'package:workout_app_5/core/screens/create_workout_selection.dart';
-import 'package:workout_app_5/core/screens/edit_workout_screen.dart';
-import 'package:workout_app_5/core/screens/workout_selection.dart';
-import 'package:workout_app_5/widgets/buttons/back_button.dart';
+import 'package:workout_app_5/core/screens/models/drawer_base_model.dart';
+import 'package:workout_app_5/core/screens/workout_ui/workout_selection.dart';
 import 'package:workout_app_5/widgets/buttons/stateless_basic_button.dart';
-import 'package:workout_app_5/widgets/reusable_button.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
+
+import '../edit_workout_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const String id = 'welcome_screen';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+
     WorkOutSelectionProvider _workOutSelectionProvider =
         Provider.of<WorkOutSelectionProvider>(context, listen: false);
 
@@ -26,17 +26,16 @@ class WelcomeScreen extends StatelessWidget {
           builder: (context) => YesNoAlertDialog(
             titleText: 'Are you sure you want to exit the app',
             noButtonFunction: () {
-              Navigator.pop(context,false);
+              Navigator.pop(context, false);
             },
             yesButtonFunction: () {
-              Navigator.pop(context,true);
+              Navigator.pop(context, true);
             },
           ),
         );
       },
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
+      child: DrawerBaseModel(
+        body: Column(
             children: <Widget>[
               SizedBox(
                 height: 50.0,
@@ -150,7 +149,6 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
       ),
     );
   }

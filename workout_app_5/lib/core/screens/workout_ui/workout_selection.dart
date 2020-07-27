@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
-import 'package:workout_app_5/core/components/provider/workout_manager_provider_v2.dart';
-import 'package:workout_app_5/core/screens/workout_manager_screen.dart';
-import 'package:workout_app_5/widgets/reusable_button.dart';
-
+import 'package:workout_app_5/core/screens/models/drawer_base_model.dart';
 
 
 class WorkOutSelectionScreen extends StatelessWidget {
@@ -13,14 +9,11 @@ class WorkOutSelectionScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.all(12.0),
-          child: Center(
-            child: CreatedCourseListView(),
-          ),
+    return DrawerBaseModel(
+      body: Container(
+        margin: EdgeInsets.all(12.0),
+        child: Center(
+          child: CreatedCourseListView(),
         ),
       ),
     );

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/editing/edit_components_provider.dart';
+import 'package:workout_app_5/core/screens/models/drawer_base_model.dart';
 
 class EditComponentsSelectionScreen extends StatelessWidget {
   static const id = 'edit_components_selection_screen';
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.all(12.0),
-          child: Center(
-            child: CreatedComponentListView(),
-          ),
+    return DrawerBaseModel(
+      body: Container(
+        margin: EdgeInsets.all(12.0),
+        child: Center(
+          child: CreatedComponentListView(),
         ),
       ),
     );

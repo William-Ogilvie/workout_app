@@ -3,19 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
+import 'package:workout_app_5/core/screens/models/drawer_base_model.dart';
 
 class EditCourseSelectionScreen extends StatelessWidget {
   static const id = 'edit_course_selection_screen';
   
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.all(12.0),
-          child: Center(
-            child: CreatedCourse2ListView(),
-          ),
+    return DrawerBaseModel(
+      body: Container(
+        margin: EdgeInsets.all(12.0),
+        child: Center(
+          child: CreatedCourse2ListView(),
         ),
       ),
     );

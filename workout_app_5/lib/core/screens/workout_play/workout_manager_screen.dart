@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/workout_manager_provider_v2.dart';
-import 'package:workout_app_5/core/screens/workout_description.dart';
+import 'package:workout_app_5/core/screens/workout_play/workout_description.dart';
 import 'package:workout_app_5/enums/workout_screen_state.dart';
 import 'package:workout_app_5/widgets/buttons/back_button.dart';
 import 'package:workout_app_5/widgets/buttons/question_button.dart';

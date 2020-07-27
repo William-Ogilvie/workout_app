@@ -29,7 +29,7 @@ class WorkOutSelectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void launch() async {
+  Future launch() async {
     statelessSelectionCardList = [];
     _mapList = await DatabaseManager.instance.querryAllCourses();
     for (int _index = 0; _index < _mapList.length; _index++) {
@@ -40,6 +40,7 @@ class WorkOutSelectionProvider extends ChangeNotifier {
 
       statelessSelectionCardList.add(tempCard);
     }
+    print('ha ha');
   }
 
   void launchEditMode() async {

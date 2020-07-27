@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
+import 'package:workout_app_5/core/screens/models/drawer_base_model.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_second_screen.dart';
 
 class CreateCourseScreen extends StatelessWidget {
@@ -10,16 +11,14 @@ class CreateCourseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // CourseCreationProvider _courseCreationProvider =
     //     Provider.of<CourseCreationProvider>(context, listen: false);
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.all(12.0),
-          child: Center(
-            child: CreatedListView(),
-          ),
+    return DrawerBaseModel(
+      body: Container(
+        margin: EdgeInsets.all(12.0),
+        child: Center(
+          child: CreatedListView(),
         ),
-        floatingActionButton: CreateFloatingActionButton(),
       ),
+      floatingActionButton: CreateFloatingActionButton(),
     );
   }
 }
