@@ -17,25 +17,28 @@ import 'package:workout_app_5/widgets/ui/drawer_tile.dart';
 class DrawerBaseModel extends StatelessWidget {
   final Widget body;
   final Widget floatingActionButton;
+  final String appBarTitle;
 
-
-  DrawerBaseModel({this.body,this.floatingActionButton});
+  DrawerBaseModel({this.body, this.floatingActionButton, this.appBarTitle});
 
   @override
   Widget build(BuildContext context) {
     // WorkOutManagerProviderV2 workOutManagerProviderV2 =
     //     Provider.of<WorkOutManagerProviderV2>(context, listen: false);
-    WorkOutSelectionProvider _workOutSelectionProvider = Provider.of<WorkOutSelectionProvider>(context, listen: false);
-    ComponentCreationProvider _componentCreationProvider = Provider.of<ComponentCreationProvider>(context, listen: false);
-    CourseCreationProvider _courseCreationProvider = Provider.of<CourseCreationProvider>(context, listen: false);
-    EditComponentsProvider _editComponentsProvider = Provider.of<EditComponentsProvider>(context, listen: false);
-
+    WorkOutSelectionProvider _workOutSelectionProvider =
+        Provider.of<WorkOutSelectionProvider>(context, listen: false);
+    ComponentCreationProvider _componentCreationProvider =
+        Provider.of<ComponentCreationProvider>(context, listen: false);
+    CourseCreationProvider _courseCreationProvider =
+        Provider.of<CourseCreationProvider>(context, listen: false);
+    EditComponentsProvider _editComponentsProvider =
+        Provider.of<EditComponentsProvider>(context, listen: false);
 
     final List<Widget> _listViewList = [
       DrawerTile(
         model: CourseCreationProvider(),
         title: 'Select',
-        onTap: () async{
+        onTap: () async {
           await _workOutSelectionProvider.launch();
           Navigator.pushNamed(context, WorkOutSelectionScreen.id);
         },
@@ -49,21 +52,21 @@ class DrawerBaseModel extends StatelessWidget {
       ),
       DrawerTile(
         title: 'Create Courses',
-        onTap: () async{
+        onTap: () async {
           await _courseCreationProvider.launch(false);
           Navigator.pushNamed(context, CreateCourseScreen.id);
         },
       ),
       DrawerTile(
         title: 'Edit Components',
-        onTap: () async{
+        onTap: () async {
           await _editComponentsProvider.launch();
           Navigator.pushNamed(context, EditComponentsSelectionScreen.id);
         },
       ),
       DrawerTile(
         title: 'Edit Courses',
-        onTap: () async{
+        onTap: () async {
           await _workOutSelectionProvider.launchEditMode();
           Navigator.pushNamed(context, EditCourseSelectionScreen.id);
         },
@@ -72,7 +75,12 @@ class DrawerBaseModel extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(
+            appBarTitle,
+            textAlign: TextAlign.center,
+          ),
+        ),
         drawer: Drawer(
           child: ListView(
             children: _listViewList,

@@ -6,12 +6,14 @@ import 'package:workout_app_5/core/screens/workout_creation/create_course_second
 
 class CreateCourseScreen extends StatelessWidget {
   static const id = 'create_course_screen';
+  static const String title = 'Course Creation';
 
   @override
   Widget build(BuildContext context) {
     // CourseCreationProvider _courseCreationProvider =
     //     Provider.of<CourseCreationProvider>(context, listen: false);
     return DrawerBaseModel(
+      appBarTitle: title,
       body: Container(
         margin: EdgeInsets.all(12.0),
         child: Center(

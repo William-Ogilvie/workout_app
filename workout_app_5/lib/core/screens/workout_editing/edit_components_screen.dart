@@ -150,6 +150,7 @@ class EditComponentsScreen extends StatelessWidget {
                             _formKey.currentState.save();
                             editComponentsProvider.saveWorkOutComponent();
                             Navigator.pop(context, true);
+                            editComponentsProvider.launch();
 
                             showDialog(
                               context: context,

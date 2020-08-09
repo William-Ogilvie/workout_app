@@ -93,6 +93,7 @@ class EditComponentsProvider extends ChangeNotifier {
   }
 
   void deleteComponent() async {
+    print(statelessEditingComponetCardList[indexInUse].databaseId);
     await DatabaseManager.instance.deleteComponent(id: statelessEditingComponetCardList[indexInUse].databaseId);
   }
 

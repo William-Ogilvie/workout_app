@@ -4,11 +4,13 @@ import 'package:workout_app_5/core/components/provider/editing/edit_components_p
 import 'package:workout_app_5/core/screens/models/drawer_base_model.dart';
 
 class EditComponentsSelectionScreen extends StatelessWidget {
-  static const id = 'edit_components_selection_screen';
+  static const String id = 'edit_components_selection_screen';
+  static const String title = 'Component Editing';
 
   @override
   Widget build(BuildContext context) {
     return DrawerBaseModel(
+      appBarTitle: title,
       body: Container(
         margin: EdgeInsets.all(12.0),
         child: Center(

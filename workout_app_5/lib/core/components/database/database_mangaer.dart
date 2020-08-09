@@ -107,8 +107,8 @@ class DatabaseManager {
 
   Future<List<Map<String, dynamic>>> querryAllCourses() async {
     Database db = await instance.database;
-    return await db
-        .query(_tableWorkOutCourses, columns: [columnName, columnId, columnRestTime]);
+    return await db.query(_tableWorkOutCourses,
+        columns: [columnName, columnId, columnRestTime]);
   }
 
   Future<List<Map<String, dynamic>>> querryAll() async {
@@ -128,8 +128,11 @@ class DatabaseManager {
       ''');
   }
 
-  Future insertCourse({
-      String courseName, String courseNumber, String courseTimes, String courseRestTime}) async {
+  Future insertCourse(
+      {String courseName,
+      String courseNumber,
+      String courseTimes,
+      String courseRestTime}) async {
     Database db = await instance.database;
     return await db.execute('''
       INSERT INTO $_tableWorkOutCourses ($columnName,  $columnCourseNumber, $columnCourseTimes, $columnRestTime) VALUES
@@ -137,8 +140,12 @@ class DatabaseManager {
       ''');
   }
 
-  Future updateCourse({String courseName, String courseNumber,
-      String courseTimes, String courseRestTime, int id}) async {
+  Future updateCourse(
+      {String courseName,
+      String courseNumber,
+      String courseTimes,
+      String courseRestTime,
+      int id}) async {
     Database db = await instance.database;
     return await db.execute('''
       UPDATE $_tableWorkOutCourses
@@ -147,8 +154,11 @@ class DatabaseManager {
       ''');
   }
 
-  Future updateComponent({String componentName, String componentDescription,
-      String type, int id}) async {
+  Future updateComponent(
+      {String componentName,
+      String componentDescription,
+      String type,
+      int id}) async {
     Database db = await instance.database;
     return await db.execute('''
       UPDATE $_tableWorkOutComponents 
@@ -175,77 +185,87 @@ class DatabaseManager {
     List<String> _currentTimesList;
     bool rebuild = false;
 
-    _tempMapList = await db.query(_tableWorkOutCourses,
-        columns: [columnCourseNumber, columnName, columnId, columnRestTime, columnCourseTimes]);
+    _tempMapList = await db.query(_tableWorkOutCourses, columns: [
+      columnCourseNumber,
+      columnName,
+      columnId,
+      columnRestTime,
+      columnCourseTimes
+    ]);
+
+    print(_tempMapList);
 
     for (int index1 = 0; index1 < _tempMapList.length; index1++) {
       _currentCourseNumber = _tempMapList[index1].values.first;
 
-      _currentCourseNumberList = _currentCourseNumber.split('#');
+      if (_currentCourseNumber != '') {
+        _currentCourseNumberList = _currentCourseNumber.split('#');
 
-      _currentTimes = _tempMapList[index1].values.last;
-      _currentTimesList = _currentTimes.split('#');
+        _currentTimes = _tempMapList[index1].values.last;
+        _currentTimesList = _currentTimes.split('#');
 
-      print('Pre times are $_currentTimesList');
-      print('Pre course numbers are $_currentCourseNumberList');
+        print('Pre times are $_currentTimesList');
+        print('Pre course numbers are $_currentCourseNumberList');
 
-      for (int index = 0; index < _currentCourseNumberList.length; index++) {
-        if (int.parse(_currentCourseNumberList[index]) == id) {
-          _currentCourseNumberList.removeAt(index);
-          _currentTimesList.removeAt(index);
-          rebuild = true;
-        }
-      }
-      print('Current times are $_currentTimesList');
-      print('Current course numbers$_currentCourseNumberList');
-
-      if (rebuild == true) {
-        String tempSQLNumber = '';
-        String tempSQLReps = '';
-        String workOutName = _tempMapList[index1].values.elementAt(1);
-        int id = _tempMapList[index1].values.elementAt(2);
-        String restTime = _tempMapList[index1].values.elementAt(3);
-
-
-        for (int _index = 0;
-            _index < _currentCourseNumberList.length;
-            _index++) {
-          switch (_index) {
-            case 0:
-              tempSQLNumber = '${_currentCourseNumberList[_index]}';
-              tempSQLReps = '${_currentTimesList[_index]}';
-              break;
-            default:
-              tempSQLNumber =
-                  '$tempSQLNumber#${_currentCourseNumberList[_index]}';
-              tempSQLReps = '$tempSQLReps#${_currentTimesList[_index]}';
+        for (int index = 0; index < _currentCourseNumberList.length; index++) {
+          if (int.parse(_currentCourseNumberList[index]) == id) {
+            _currentCourseNumberList.removeAt(index);
+            _currentTimesList.removeAt(index);
+            rebuild = true;
           }
         }
+        print('Current times are $_currentTimesList');
+        print('Current course numbers$_currentCourseNumberList');
 
+        if (rebuild == true) {
+          String tempSQLNumber = '';
+          String tempSQLReps = '';
+          String workOutName = _tempMapList[index1].values.elementAt(1);
+          int id = _tempMapList[index1].values.elementAt(2);
+          String restTime = _tempMapList[index1].values.elementAt(3);
 
-        tempSQLNumber.replaceRange(
-            tempSQLNumber.length, tempSQLNumber.length, '');
-        tempSQLNumber.trim();
-        tempSQLReps.replaceRange(tempSQLReps.length, tempSQLReps.length, '');
-        tempSQLReps.trim();
-        print(tempSQLNumber);
-        print(tempSQLReps);
+          for (int _index = 0;
+              _index < _currentCourseNumberList.length;
+              _index++) {
+            switch (_index) {
+              case 0:
+                tempSQLNumber = '${_currentCourseNumberList[_index]}';
+                tempSQLReps = '${_currentTimesList[_index]}';
+                break;
+              default:
+                tempSQLNumber =
+                    '$tempSQLNumber#${_currentCourseNumberList[_index]}';
+                tempSQLReps = '$tempSQLReps#${_currentTimesList[_index]}';
+            }
+          }
 
-        DatabaseManager.instance.updateCourse(courseName: workOutName, courseNumber: tempSQLNumber, courseTimes: tempSQLReps, courseRestTime: restTime, id: id);
+          tempSQLNumber.replaceRange(
+              tempSQLNumber.length, tempSQLNumber.length, '');
+          tempSQLNumber.trim();
+          tempSQLReps.replaceRange(tempSQLReps.length, tempSQLReps.length, '');
+          tempSQLReps.trim();
+          print(tempSQLNumber);
+          print(tempSQLReps);
+
+          DatabaseManager.instance.updateCourse(
+              courseName: workOutName,
+              courseNumber: tempSQLNumber,
+              courseTimes: tempSQLReps,
+              courseRestTime: restTime,
+              id: id);
+        }
       }
+      print('Final times are $_currentTimesList');
+      print('Final course numbers $_currentCourseNumberList');
     }
-    print('Final times are $_currentTimesList');
-    print('Final course numbers $_currentCourseNumberList');
   }
 
   Future deleteCourse(int id) async {
     Database db = await instance.database;
-    db.execute(
-      '''
+    db.execute('''
       DELETE FROM $_tableWorkOutCourses 
       WHERE $columnId = $id;
-      '''
-    );
+      ''');
   }
 
   static final String _openingSQLInsertion = '''
