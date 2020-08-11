@@ -5,6 +5,7 @@ import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/creating/course_creation_provider.dart';
 import 'package:workout_app_5/core/components/provider/selecting/workout_selection_provider.dart';
 import 'package:workout_app_5/core/screens/workout_creation/create_course_screen.dart';
+import 'package:workout_app_5/core/screens/workout_editing/edit_course_selection.dart';
 import 'package:workout_app_5/widgets/show_dialog/ok_alert_dialog.dart';
 import 'package:workout_app_5/widgets/show_dialog/yes_no_alert_dialog.dart';
 
@@ -30,10 +31,16 @@ class CreateCourseSecondScreen extends StatelessWidget {
                 'Are you sure you want to leave? Any unsaved changes will not be saved',
             yesButtonFunction: () async {
               courseCreationProvider.alreadyPushed = false;
-              courseCreationProvider.editMode
-                  ? await _workOutSelectionProvider.launchEditMode()
-                  : print('Not edit mode');
-              Navigator.pop(context, true);
+              
+              if(courseCreationProvider.editMode == true) {
+                await _workOutSelectionProvider.launchEditMode();
+                Navigator.pop(context, true);
+                Navigator.pushReplacementNamed(context, EditCourseSelectionScreen.id);
+              } else {
+                await courseCreationProvider.launch(false);
+                Navigator.pop(context, true);
+                Navigator.pushReplacementNamed(context, CreateCourseScreen.id);
+              }
             },
             noButtonFunction: () {
               Navigator.pop(context, false);
@@ -138,7 +145,10 @@ class CreateCourseSecondScreen extends StatelessWidget {
                           color: courseCreationProvider.removeMode
                               ? Colors.red[400]
                               : Colors.grey[300],
-                          child: Text('Remove', style: kWorkOutCourseButtonTextStyle,),
+                          child: Text(
+                            'Remove',
+                            style: kWorkOutCourseButtonTextStyle,
+                          ),
                           onPressed: () {
                             courseCreationProvider.removeMode
                                 ? courseCreationProvider.removeMode = false
@@ -150,9 +160,10 @@ class CreateCourseSecondScreen extends StatelessWidget {
                     Flexible(
                       child: RaisedButton(
                         color: Colors.grey[300],
-                        child: Text(courseCreationProvider.editMode
-                            ? 'Save'
-                            : 'Submit',style: kWorkOutCourseButtonTextStyle,),
+                        child: Text(
+                          courseCreationProvider.editMode ? 'Save' : 'Submit',
+                          style: kWorkOutCourseButtonTextStyle,
+                        ),
                         onPressed: () {
                           if (!_formKey.currentState.validate()) {
                             return;
@@ -211,7 +222,10 @@ class CreateCourseSecondScreen extends StatelessWidget {
                         ? Flexible(
                             child: RaisedButton(
                               color: Colors.grey[300],
-                              child: Text('Delete',style: kWorkOutCourseButtonTextStyle,),
+                              child: Text(
+                                'Delete',
+                                style: kWorkOutCourseButtonTextStyle,
+                              ),
                               onPressed: () {
                                 showDialog(
                                   context: context,
