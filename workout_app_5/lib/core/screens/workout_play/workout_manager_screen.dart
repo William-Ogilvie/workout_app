@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 import 'package:workout_app_5/constants/text_styles.dart';
 import 'package:workout_app_5/core/components/provider/workout_manager_provider_v2.dart';
 import 'package:workout_app_5/core/screens/workout_play/workout_description.dart';
@@ -29,6 +30,7 @@ class WorkOutManagerScreen extends StatelessWidget {
                               alignment: Alignment(-1.1, 0.6),
                               child: StatelessBackButton(
                                 onPressed: () {
+                                  Wakelock.disable();
                                   Navigator.pop(context);
                                 },
                               ),
@@ -57,7 +59,8 @@ class WorkOutManagerScreen extends StatelessWidget {
                         noButtonFunction: () {
                           Navigator.pop(context, false);
                         },
-                        yesButtonFunction: () {
+                        yesButtonFunction: () {         
+                          Wakelock.disable();
                           workOutManagerProviderV2.disableTimer();
                           workOutManagerProviderV2.clearIndex();
                           Navigator.pop(context, true);
